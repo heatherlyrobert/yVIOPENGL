@@ -1,6 +1,6 @@
 /*============================----beg-of-source---============================*/
-#ifndef yVICURSES_priv
-#define yVICURSES_priv yes
+#ifndef yVIOPENGL_priv
+#define yVIOPENGL_priv yes
 
 
 
@@ -36,8 +36,8 @@
 
 #define     P_VERMAJOR  "2.--, clean, improve, and expand"
 #define     P_VERMINOR  "2.0-, break out yVIKEYS into curses and opengl"
-#define     P_VERNUM    "2.0a"
-#define     P_VERTXT    "copy over top files"
+#define     P_VERNUM    "2.0b"
+#define     P_VERTXT    "menus and float working nicely now with metis"
 
 #define     P_PRIORITY  "direct, simple, brief, vigorous, and lucid (h.w. fowler)"
 #define     P_PRINCIPAL "[grow a set] and build your wings on the way down (r. bradbury)"
@@ -64,6 +64,9 @@
 #include    <yFILE.h>             /* heatherly vi-keys content file handling  */
 #include    <yMAP.h>              /* heatherly vi-keys location management    */
 /*---(custom other)----------------------*/
+#include    <yX11.h>              /* heatherly xlib/glx setup/teardown        */
+#include    <yFONT.h>             /* heatherly texture mapped fonts           */
+#include    <yCOLOR.h>            /* heatherly opengl color handling          */
 #include    <yDLST_solo.h>        /* heatherly double-double-list             */
 /*---(posix standard)--------------------*/
 #include    <GL/gl.h>             /* opengl standard primary header           */
@@ -71,13 +74,16 @@
 #include    <X11/extensions/shape.h>   /* xwindows shape extension            */
 
 
-#define     MAX_PRIMARY    20
+#define     MAX_PRIMARY    50
 typedef  struct cBASIC  tBASIC;
 struct cBASIC {
    char        abbr;
    char        terse       [LEN_SHORT];
    char        desc        [LEN_LABEL];
-   short       value;
+   char        hex         [LEN_TERSE];
+   float       red;
+   float       grn;
+   float       blu;
 };
 extern tBASIC  g_primary [MAX_PRIMARY];
 
@@ -87,13 +93,11 @@ typedef  struct cCOLOR  tCOLOR;
 struct cCOLOR {
    char        terse       [LEN_LABEL];     /* short description              */
    char        desc        [LEN_DESC ];     /* description/reason             */
-   char        fg;                          /* foreground color               */
-   char        bg;                          /* background color               */
-   int         value;                       /* curses attribute value         */
+   char        fg;
+   char        bg;
 };
 extern tCOLOR  g_colors [MAX_COLOR];
 extern int     g_ncolor;
-
 
 
 typedef    struct    cMY    tMY;
@@ -103,8 +107,10 @@ struct cMY {
    int         x_cur;
    int         y_cur;
    char        p_formula;         /* formula configuration                   */
+   int         fixed;                       /* fixed font                     */
+   int         pretty;                      /* pretty font                    */
 };
-extern tMY         myVICURSES;
+extern tMY         myVIOPENGL;
 
 
 
@@ -112,78 +118,78 @@ extern char g_print       [LEN_RECD];
 
 
 
-/*===[[ yVICURSES_base.c ]]===================================================*/
+/*===[[ yVIOPENGL_base.c ]]===================================================*/
 /*345678901-12345678901-12345678901-12345678901-12345678901-12345678901-123456*/
 /*---(program)--------------*/
-char        yVICURSES_init          (char *a_title, char *a_version, char a_mode);
-char        yvicurses_color_purge   (void);
-char        yVICURSES_wrap          (void);
-char        yVICURSES_main          (char *a_delay, char *a_update, void *a_altinput);
+char        yVIOPENGL_init          (char *a_title, char *a_version, char a_mode, int a_wide, int a_tall);
+char        yVIOPENGL_wrap          (void);
+char        yVIOPENGL_main          (char *a_delay, char *a_update, void *a_altinput);
 /*---(unittest)-------------*/
-char        yvicurses__unit_quiet   (void);
-char        yvicurses__unit_loud    (void);
-char        yvicurses__unit_end     (void);
+char        yviopengl__unit_quiet   (void);
+char        yviopengl__unit_loud    (void);
+char        yviopengl__unit_end     (void);
 /*---(done)-----------------*/
-char*       yVICURSES__unit         (char *a_question, char a_index);
+char*       yVIOPENGL__unit         (char *a_question, char a_index);
 
 
 
-/*===[[ yVICURSES_base.c ]]===================================================*/
+/*===[[ yVIOPENGL_base.c ]]===================================================*/
 /*345678901-12345678901-12345678901-12345678901-12345678901-12345678901-123456*/
 /*---(resize)---------------*/
-char        yvicurses_resize        (void);
+char        yviopengl_resize        (void);
 /*---(input)----------------*/
-char        yvicurses_getch         (char a_block, char *a_ch);
+char        yviopengl_getch         (char a_block, char *a_ch);
 /*---(draw)-----------------*/
-char        yvicurses_cleanse       (void);
-char        yvicurses_prep          (char a_abbr);
-char        yvicurses_cursor        (void);
-char        yvicurses_refresh       (void);
+char        yviopengl_cleanse       (void);
+char        yviopengl_prep          (char a_abbr);
+char        yviopengl_cursor        (void);
+char        yviopengl_refresh       (void);
 /*---(done)-----------------*/
 
 
 
-/*===[[ yVICURSES_base.c ]]===================================================*/
+/*===[[ yVIOPENGL_base.c ]]===================================================*/
 /*345678901-12345678901-12345678901-12345678901-12345678901-12345678901-123456*/
 /*---(search)---------------*/
-char        yvicurses__by_abbr      (char a_abbr);
-char        yvicurses__primary      (char a_abbr);
-char        yvicurses__by_name      (char *a_terse);
+char        yviopengl__by_abbr      (char a_abbr);
+char        yviopengl__primary      (char a_abbr);
+char        yviopengl__by_name      (char *a_terse);
 /*---(create)---------------*/
-char        yVICURSES_color         (char *a_terse, char *a_desc, char a_fg, char a_bg);
+char        yVIOPENGL_color         (char *a_terse, char *a_desc, char a_fg, char a_bg);
 /*---(using)----------------*/
-char        yVICURSES_by_name       (char *a_terse);
-char*       yvicurses__by_pair      (int a_pair);
+char        yVIOPENGL_by_name       (char *a_terse, char a_fg, char a_alpha);
+/*> char*       yviopengl__by_pair      (int a_pair);                                 <*/
 /*---(program)--------------*/
-char        yvicurses_color_init    (void);
-char        yvicurses_color_wrap    (void);
+char        yviopengl_color_init    (void);
+char        yviopengl_color_wrap    (void);
 /*---(done)-----------------*/
 
 
 
-/*===[[ yVICURSES_draw.c ]]===================================================*/
+/*===[[ yVIOPENGL_draw.c ]]===================================================*/
 /*345678901-12345678901-12345678901-12345678901-12345678901-12345678901-123456*/
 /*---(text)-----------------*/
-char        yvicurses_title         (void);
-char        yvicurses_version       (void);
-char        yvicurses_modes         (void);
-char        yvicurses_status        (void);
-char        yvicurses_command       (void);
-char        yvicurses_keys          (void);
+char        yviopengl_title         (void);
+char        yviopengl_version       (void);
+char        yviopengl_modes         (void);
+char        yviopengl_status        (void);
+char        yviopengl_command       (void);
+char        yviopengl_keys          (void);
 /*---(fancy)----------------*/
-char        yvicurses_univs         (void);
-char        yvicurses_menus         (void);
+char        yviopengl_univs         (void);
+char        yviopengl_menus         (void);
 /*---(source)---------------*/
-char        yvicurses__display      (char a_part, char a_loc, char a_style);
-char        yvicurses_formula       (void);
-char        yvicurses_formula_min   (void);
-char        yvicurses_formula_small (void);
-char        yvicurses_formula_label (void);
-char        yvicurses_formula_max   (void);
-char        yvicurses_command       (void);
-char        yvicurses_float         (void);
+char        yviopengl__display      (char a_part, char a_loc, char a_style);
+char        yviopengl_formula       (void);
+char        yviopengl_formula_min   (void);
+char        yviopengl_formula_small (void);
+char        yviopengl_formula_label (void);
+char        yviopengl_formula_max   (void);
+char        yviopengl_float         (void);
 /*---(done)-----------------*/
 
+char        yviopengl_font_load     (void);
+char        yviopengl_font_close    (void);
 
 #endif
 
