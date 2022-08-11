@@ -13,18 +13,20 @@ static void      o___RESIZE__________________o (void) {;}
 char
 yviopengl_resize        (void)
 {
-   int         x_wide     =    0;
-   int         x_tall     =    0;
+   char        rc         =    0;
+   short       x_wide     =    0;
+   short       x_tall     =    0;
    /*---(header)-------------------------*/
    DEBUG_LOOP   yLOG_enter   (__FUNCTION__);
-   /*> getmaxyx (stdscr, x_tall, x_wide);                                             <* 
-    *> DEBUG_LOOP   yLOG_value   ("x_wide"    , x_wide);                              <* 
-    *> DEBUG_LOOP   yLOG_value   ("x_tall"    , x_tall);                              <* 
-    *> if (myVIOPENGL.wide != x_wide || myVIOPENGL.tall != x_tall) {                  <* 
-    *>    yVIEW_resize (x_wide, x_tall, 0);                                           <* 
-    *>    myVIOPENGL.wide = x_wide;                                                   <* 
-    *>    myVIOPENGL.tall = x_tall;                                                   <* 
-    *> }                                                                              <*/
+   yVIEW_size (YVIEW_WINDOW, NULL, NULL, &x_wide, NULL, &x_tall);
+   DEBUG_LOOP   yLOG_value   ("x_wide"    , x_wide);
+   DEBUG_LOOP   yLOG_value   ("x_tall"    , x_tall);
+   if (myVIOPENGL.wide != x_wide || myVIOPENGL.tall != x_tall) {
+      yX11_resize (x_wide, x_tall);
+      myVIOPENGL.wide = x_wide;
+      myVIOPENGL.tall = x_tall;
+      yVIEW_debug_list ();
+   }
    DEBUG_LOOP   yLOG_exit    (__FUNCTION__);
    return 0;
 }
@@ -158,12 +160,14 @@ yviopengl_prep          (char a_part)
    DEBUG_GRAF   yLOG_note    ("set up the view");
    glViewport      (x_left, x_bott, x_wide, x_tall);
    glMatrixMode    (GL_PROJECTION);
+   DEBUG_GRAF   yLOG_char    ("x_type"    , x_type);
    glLoadIdentity  ();
-   if (x_type  == YVIEW_FLAT )  glOrtho         (x_min, x_max, y_min, y_max, -500, 500);
-   else                         gluPerspective  (45.0f, (GLfloat) x_len / (GLfloat) y_len, 0.01f, 4000.0f);
+   if      (x_type  == YVIEW_FLAT)     glOrtho         (x_min, x_max, y_min, y_max, -500, 500);
+   else if (x_type  == YVIEW_FLATISH)  glOrtho         (x_min, x_max, y_min, y_max, -500, 500);
+   else                                gluPerspective  (45.0f, (GLfloat) x_len / (GLfloat) y_len, 0.01f, 4000.0f);
    glMatrixMode    (GL_MODELVIEW);
    /*---(background)---------------------*/
-   if (x_type  == YVIEW_FLAT ) {
+   if (x_type  == YVIEW_FLAT) {
       DEBUG_GRAF   yLOG_note    ("draw a background for ortho/flat");
       glPushMatrix    (); {
          /*> DEBUG_GRAF   yLOG_value   ("color"     , s_parts [n].color);             <*/

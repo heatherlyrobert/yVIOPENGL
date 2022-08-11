@@ -36,8 +36,8 @@
 
 #define     P_VERMAJOR  "2.--, clean, improve, and expand"
 #define     P_VERMINOR  "2.0-, break out yVIKEYS into curses and opengl"
-#define     P_VERNUM    "2.0b"
-#define     P_VERTXT    "menus and float working nicely now with metis"
+#define     P_VERNUM    "2.0c"
+#define     P_VERTXT    "notes, targets, and lines now working"
 
 #define     P_PRIORITY  "direct, simple, brief, vigorous, and lucid (h.w. fowler)"
 #define     P_PRINCIPAL "[grow a set] and build your wings on the way down (r. bradbury)"
@@ -55,14 +55,15 @@
 #include    <yLOG.h>              /* heatherly program logging                */
 #include    <ySTR.h>              /* heatherly string processing              */
 /*---(custom vikeys)---------------------*/
-#include    <yKEYS.h>             /* heatherly vi-keys key handling           */
-#include    <yMODE.h>             /* heatherly vi-keys mode tracking          */
-#include    <yMACRO.h>            /* heatherly vi-keys macro processing       */
-#include    <ySRC.h>              /* heatherly vi-keys source editing         */
-#include    <yCMD.h>              /* heatherly vi-keys command processing     */
-#include    <yVIEW.h>             /* heatherly vi-keys view management        */
-#include    <yFILE.h>             /* heatherly vi-keys content file handling  */
-#include    <yMAP.h>              /* heatherly vi-keys location management    */
+#include    <yKEYS.h>             /* heatherly vikeys key handling           */
+#include    <yMODE.h>             /* heatherly vikeys mode tracking          */
+#include    <yMACRO.h>            /* heatherly vikeys macro processing       */
+#include    <ySRC.h>              /* heatherly vikeys source editing         */
+#include    <yCMD.h>              /* heatherly vikeys command processing     */
+#include    <yVIEW.h>             /* heatherly vikeys view management        */
+#include    <yFILE.h>             /* heatherly vikeys content file handling  */
+#include    <yMARK.h>             /* heatherly vikeys search and marking      */
+#include    <yMAP.h>              /* heatherly vikeys location management    */
 /*---(custom other)----------------------*/
 #include    <yX11.h>              /* heatherly xlib/glx setup/teardown        */
 #include    <yFONT.h>             /* heatherly texture mapped fonts           */
@@ -190,6 +191,9 @@ char        yviopengl_float         (void);
 
 char        yviopengl_font_load     (void);
 char        yviopengl_font_close    (void);
+
+
+char        yviopengl_notes         (void);
 
 #endif
 

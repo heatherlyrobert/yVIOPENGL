@@ -49,6 +49,8 @@ yVIOPENGL_init          (char *a_title, char *a_version, char a_mode, int a_wide
       DEBUG_GRAF   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
+   myVIOPENGL.wide = a_wide;
+   myVIOPENGL.tall = a_tall;
    /*---(color)--------------------------*/
    DEBUG_GRAF   yLOG_note    ("clearing");
    /*> glClearColor    (1.0f, 1.0f, 1.0f, 1.0f);                                      <*/
@@ -118,7 +120,8 @@ yVIOPENGL_init          (char *a_title, char *a_version, char a_mode, int a_wide
       DEBUG_GRAF   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
-   yviopengl_resize ();
+   yVIEW_resize (a_wide, a_tall, 0);
+   yVIEW_debug_list ();
    /*----(later)-------------------------*/
    rc = yKEYS_init           ();
    DEBUG_GRAF   yLOG_value   ("yKEYS"   , rc);
@@ -144,6 +147,12 @@ yVIOPENGL_init          (char *a_title, char *a_version, char a_mode, int a_wide
       DEBUG_GRAF   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
+   rc = yMARK_init           ();
+   DEBUG_GRAF   yLOG_value   ("yMARK"   , rc);
+   --rce;  if (rc < 0) {
+      DEBUG_GRAF   yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
+   }
    rc = yviopengl_font_load  ();
    DEBUG_GRAF   yLOG_value   ("font"    , rc);
    --rce;  if (rc < 0) {
@@ -160,6 +169,7 @@ yVIOPENGL_init          (char *a_title, char *a_version, char a_mode, int a_wide
    yVIEW_simple (YVIEW_FLOAT  , 0, yviopengl_float);
    yVIEW_simple (YVIEW_KEYS   , 0, yviopengl_keys);
    yVIEW_simple (YVIEW_BUFFER , 0, yviopengl_univs);
+   yVIEW_simple (YVIEW_NOTES  , 0, yviopengl_notes);
    yVIEW_menus  (yviopengl_menus);
    myVIOPENGL.p_formula = 's';
    yVIEW_switch_add (YVIEW_FORMULA, "min"  , "", yviopengl_formula_min  , "minimal formula display");

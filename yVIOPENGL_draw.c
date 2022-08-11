@@ -4,11 +4,19 @@
 #include    "yVIOPENGL_priv.h"
 
 
+/*
+ * metis § wv4·· § get editing window to show cursor, length, etc                         § M25J0t §  · §
+ * metis § mg2·· § make sure menu shows error color when yKEYS locks it                   § M25JAU §  · §
+ * metis § wc2·· § status bar must recolor for errors and warnings                        § M25JBH §  · §
+ *
+ *
+ */
 
 char        face_pretty [LEN_LABEL] = "sansation";
 /*> char   face_fixed  [30] = "comfortaa";                                            <*/
 /*> char   face_fixed [30] = "courier";                                               <*/
-char        face_fixed  [LEN_LABEL] = "hack";
+/*> char        face_fixed  [LEN_LABEL] = "hack";                                     <*/
+char        face_fixed  [LEN_LABEL] = "shrike";
 
 
 
@@ -328,7 +336,6 @@ yviopengl__display         (char a_part, char a_loc, char a_style)
    DEBUG_GRAF   yLOG_info     ("label"     , l);
    DEBUG_GRAF   yLOG_info     ("format"    , f);
    /*---(test for editing)---------------*/
-   /*> x_edit = yviopengl__color (a_part);                                            <*/
    glPushMatrix    (); {
       glColor4f (0.0, 0.0, 0.0, 1.0);
       glBegin         (GL_POLYGON); {
@@ -337,7 +344,8 @@ yviopengl__display         (char a_part, char a_loc, char a_style)
          glVertex3f  (x_max + 2, y_min - 2,  100);
          glVertex3f  (x_min - 2, y_min - 2,  100);
       } glEnd   ();
-      glColor4f (1.0, 1.0, 0.0, 1.0);
+      x_edit = yviopengl__color (a_part);
+      /*> glColor4f (1.0, 1.0, 0.0, 1.0);                                             <*/
       glBegin         (GL_POLYGON); {
          glVertex3f  (x_min    , y_max    ,  110);
          glVertex3f  (x_max    , y_max    ,  110);
@@ -570,7 +578,7 @@ yviopengl_menu__back     (char a_lvl, short x_min, short x_cen, short x_max, sho
    } glEnd   ();
    glBegin         (GL_POLYGON); {
       glVertex3f  (x_min    , y_mid + 6,  120);
-      glVertex3f  (x_min + 6, y_mid    ,  120);
+      glVertex3f  (x_min + 7, y_mid    ,  120);
       glVertex3f  (x_min    , y_mid - 6,  120);
    } glEnd   ();
    glBegin         (GL_POLYGON); {
@@ -579,9 +587,14 @@ yviopengl_menu__back     (char a_lvl, short x_min, short x_cen, short x_max, sho
       glVertex3f  (x_max    , y_mid - 6,  120);
    } glEnd   ();
    glBegin         (GL_POLYGON); {
-      glVertex3f  (x_min    , y_mid + 6,  120);
-      glVertex3f  (x_min + 6, y_mid    ,  120);
-      glVertex3f  (x_min    , y_mid - 6,  120);
+      glVertex3f  (x_min + 20, y_min    ,  120);
+      glVertex3f  (x_min + 26, y_min + 6,  120);
+      glVertex3f  (x_min + 32, y_min    ,  120);
+   } glEnd   ();
+   glBegin         (GL_POLYGON); {
+      glVertex3f  (x_max - 20, y_min    ,  120);
+      glVertex3f  (x_max - 26, y_min + 6,  120);
+      glVertex3f  (x_max - 32, y_min    ,  120);
    } glEnd   ();
    glColor4f (0.70, 0.35, 0.15, 1.00);
    for (i = 0; i < 360; i += (360.0 / 18.0)) {

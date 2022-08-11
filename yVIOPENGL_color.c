@@ -3,6 +3,11 @@
 #include    "yVIOPENGL.h"
 #include    "yVIOPENGL_priv.h"
 
+/*
+ * metis § mc4·· § properly tune colors for opengl                                        § M25J6T §  · §
+ *
+ *
+ */
 
 
 tBASIC  g_primary [MAX_PRIMARY] = {
@@ -45,7 +50,7 @@ tBASIC  g_primary [MAX_PRIMARY] = {
    {  'S' , "SPR" , "l.spring"        , "abcdef",  0.75,  0.75,  0.00  },
    {  'G' , "GRN" , "l.green"         , "abcdef",  0.00,  1.00,  0.00  },
    {  'A' , "CYN" , "l.cyan"          , "abcdef",  0.00,  0.75,  0.75  },
-   {  'B' , "BLU" , "l.blue"          , "abcdef",  0.00,  0.00,  1.00  },
+   {  'B' , "BLU" , "l.blue"          , "abcdef",  0.25,  0.25,  1.00  },
    {  'D' , "IND" , "l.indigo"        , "abcdef",  0.75,  0.00,  0.75  },
    {  'P' , "PUR" , "l.purple"        , "abcdef",  1.00,  0.00,  1.00  },
    {  'M' , "MAG" , "l.magenta"       , "abcdef",  1.00,  0.00,  0.66  },
@@ -275,7 +280,7 @@ yviopengl_color_init    (void)
    yVIOPENGL_color  ("u_place"   , "window, universe/buffers"                           , 'R' , '-' );
    /*---(trouble)------------------------*/
    yVIOPENGL_color  ("!_warn"    , "trouble, warning"                                   , 'O' , 'R' );
-   yVIOPENGL_color  ("!_errs"    , "trouble, error"                                     , '!' , 'R' );
+   yVIOPENGL_color  ("!_errs"    , "trouble, error"                                     , '!' , 'r' );
    /*---(formula modes)------------------*/
    yVIOPENGL_color  ("i_maps"    , "map mode (2d review of sheet/cell collection"       , '-' , 'O' );
    yVIOPENGL_color  ("i_srcs"    , "source mode (single cell review)"                   , '-' , 'G' );
@@ -299,11 +304,18 @@ yviopengl_color_init    (void)
    yVIOPENGL_color  ("m_menu"    , "menu, normal item"                                  , 'G' , '-' );
    yVIOPENGL_color  ("m_cant"    , "menu, item not available"                           , 'O' , 'y' );
    yVIOPENGL_color  ("m_errs"    , "menu, item in error"                                , 'R' , 'y' );
-   /*---(overlays)-------*/
+   /*---(menus)----------*/
    yVIOPENGL_color  ("m_main"    , "note, main title/subject"                           , '!' , 'M' );
    yVIOPENGL_color  ("m_warn"    , "note, displaying a warning"                         , '!' , 'R' );
    yVIOPENGL_color  ("m_curr"    , "note, current note item"                            , '-' , 'Y' );
    yVIOPENGL_color  ("m_prev"    , "note, old note item"                                , 'Y' , 'y' );
+   /*---(overlays)-------*/
+   yVIOPENGL_color  ("n_main"    , "note, main title/subject"                           , 'c' , 'C' );
+   yVIOPENGL_color  ("n_warn"    , "note, displaying a warning"                         , 'R' , 'r' );
+   yVIOPENGL_color  ("n_curr"    , "note, current note item"                            , 'y' , 'Y' );
+   yVIOPENGL_color  ("n_prev"    , "note, old note item"                                , 'Y' , 'y' );
+   yVIOPENGL_color  ("n_line"    , "note, connector line"                               , 'Y' , '-' );
+   yVIOPENGL_color  ("n_dark"    , "note, connector line darkened"                      , 'y' , '-' );
    /*---(headers)--------*/
    yVIOPENGL_color  ("h_curr"    , "header (row/col) current"                           , 'A' , '-' );
    yVIOPENGL_color  ("h_lock"    , "header (row/col) locked in place"                   , 'K' , 'r' );

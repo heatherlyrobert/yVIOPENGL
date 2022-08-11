@@ -8,7 +8,7 @@ NAME_BASE  = yVIOPENGL
 # additional standard and outside libraries
 LIB_STD    = -lX11 -lGL -lGLU -lm -lXext
 # all heatherly libraries used, debug versions whenever available
-LIB_MINE   = -lyKEYS_debug -lyMODE_debug -lyMACRO_debug -lySRC_debug -lyCMD_debug -lyVIEW_debug -lyFILE_debug -lyMAP_debug -lySTR_debug -lyFONT_debug -lyCOLOR_debug -lyX11_debug
+LIB_MINE   = -lyKEYS_debug -lyMODE_debug -lyMACRO_debug -lySRC_debug -lyCMD_debug -lyVIEW_debug -lyFILE_debug -lyMAP_debug -lySTR_debug -lyFONT_debug -lyCOLOR_debug -lyX11_debug -lyMARK_debug
 # directory for production code, no trailing slash
 INST_DIR   = 
 
