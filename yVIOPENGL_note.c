@@ -13,7 +13,7 @@ yviopengl_notes_shadow  (short x, short y, uchar w, uchar h, uchar *t)
    int         x_beg, x_next, x_cr;
    int         i, j;
    char       *p           = NULL;
-   int         z           = -152;
+   int         z           =  910;
    float       xx, yy, ww, hh;
    /*---(header)-------------------------*/
    DEBUG_GRAF   yLOG_enter   (__FUNCTION__);
@@ -42,7 +42,7 @@ yviopengl_notes_draw    (cchar s, short x, short y, uchar w, uchar h, uchar *t)
    int         x_beg, x_next, x_cr;
    int         i, j;
    char       *p           = NULL;
-   int         z           = -150;
+   int         z           =  920;
    float       xx, yy, ww, hh;
    /*---(locals)-----------+-----+-----+-*/
    float       x_edge, y_edge;
@@ -87,9 +87,11 @@ yviopengl_notes_line    (char c, short xb, short yb, short xe, short ye)
 {
    int         i           =    0;
    char        x_side      =    3;
-   int         z           = -148;
+   int         z           =  900;
+   /*---(quick out)----------------------*/
+   if (c == '-')    return 0;
+   /*---(header)-------------------------*/
    DEBUG_GRAF   yLOG_enter   (__FUNCTION__);
-   /*> mvprintw (10, 10, "ˆ");                                                        <*/
    DEBUG_GRAF   yLOG_complex ("args"       , "%c  %4dx %4dy  %4dx %4dy", c, xb, yb, xe, ye);
    /*---(origin)-------------------------*/
    glColor4f (0.0, 0.0, 0.0, 1.0);
@@ -99,7 +101,6 @@ yviopengl_notes_line    (char c, short xb, short yb, short xe, short ye)
       glVertex3f (xb - x_side, yb + x_side, z);
       glVertex3f (xb + x_side, yb + x_side, z);
    } glEnd();
-   /*> mvprintw (yb, xb, "³");                                                        <*/
    /*---(first leg)----------------------*/
    switch (c) {
    case 'Ô' : case '1' : case '8' :
@@ -141,7 +142,6 @@ yviopengl_notes_line    (char c, short xb, short yb, short xe, short ye)
       break;
    }
    /*---(final point)--------------------*/
-   /*> mvprintw (ye, xe    , "Ï");                                                    <*/
    glColor4f (0.0, 0.0, 0.0, 1.0);
    glBegin(GL_POLYGON); {
       glVertex3f (xe + x_side, ye - x_side, z);
@@ -178,6 +178,8 @@ yviopengl_notes         (void)
       if (rc < 0)  break;
       DEBUG_GRAF   yLOG_complex  ("note"      , "%2di, %2dm, %4dx, %4dw, %4dy, %4dh, %c, %s", i, m, x, w, y, h, s, t);
       yviopengl_notes_shadow (x, y, w, h, t);
+      yVIOPENGL_by_name ("n_line", '-', 1.0);
+      yviopengl_notes_line (c, xb, yb, xe, ye);
       if (s == ')') {
          DEBUG_GRAF   yLOG_note    ("title type");
          yVIOPENGL_by_name ("n_main", '-', 1.0);
@@ -192,8 +194,6 @@ yviopengl_notes         (void)
          yVIOPENGL_by_name ("n_prev", '-', 1.0);
       }
       yviopengl_notes_draw (s, x, y, w, h, t);
-      yVIOPENGL_by_name ("n_line", '-', 1.0);
-      yviopengl_notes_line (c, xb, yb, xe, ye);
    }
    DEBUG_GRAF   yLOG_exit    (__FUNCTION__);
    return 0;

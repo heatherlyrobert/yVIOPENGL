@@ -148,8 +148,24 @@ yviopengl_prep          (char a_part)
    DEBUG_GRAF   yLOG_enter   (__FUNCTION__);
    /*---(get size)-----------------------*/
    /*> yVIEW_opengl (a_part, x_name, &x_on, NULL, x_text, &x_type, &x_anchor, NULL, &x_min, &x_max, &x_len, &y_min, &y_max, &y_len);   <*/
-   yVIEW_curses (a_part, x_name, &x_on, NULL, x_text, NULL, &x_left, &x_wide, &x_bott, &x_tall);
-   yVIEW_bounds (a_part, &x_type, &x_anchor, NULL, &x_min, &x_max, &x_len, &y_min, &y_max, &y_len);
+   DEBUG_GRAF   yLOG_char    ("a_part"    , a_part);
+   if (strchr ("MFH", a_part) != NULL) {
+      DEBUG_GRAF   yLOG_note    ("floating type (menu, float, history)");
+      yVIEW_curses (YVIEW_WINDOW, x_name, NULL, NULL, NULL, NULL, &x_left, &x_wide, &x_bott, &x_tall);
+      /*> yVIEW_curses (a_part, x_name, &x_on, NULL, x_text, NULL, &x_min, &x_len, &y_min, &y_len);   <*/
+      /*> y_max = y_min + y_len;                                                      <*/
+      x_min = x_left;
+      x_max = x_min + x_wide;
+      y_min = x_bott;
+      y_max = y_min + x_tall;
+      yVIEW_bounds (a_part, &x_type, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+      x_anchor = YVIEW_BOTLEF;
+   } else {
+      DEBUG_GRAF   yLOG_note    ("normal type");
+      yVIEW_curses (a_part, x_name, &x_on, NULL, x_text, NULL, &x_left, &x_wide, &x_bott, &x_tall);
+      yVIEW_bounds (a_part, &x_type, &x_anchor, NULL, &x_min, &x_max, &x_len, &y_min, &y_max, &y_len);
+   }
+   DEBUG_GRAF   yLOG_complex (x_name, "left %4d, wide %4d, bott %4d, tall %4d", x_left, x_wide, x_bott, x_tall);
    DEBUG_GRAF   yLOG_complex (x_name, "%c on %c, %c x_min %4d, x_max %4d, y_min %4d, y_max %4d", a_part, x_on, x_anchor, x_min, x_max, y_min, y_max);
    if (x_on != 'y') {
       DEBUG_GRAF   yLOG_note    ("hidden, not marked for display");
@@ -162,8 +178,8 @@ yviopengl_prep          (char a_part)
    glMatrixMode    (GL_PROJECTION);
    DEBUG_GRAF   yLOG_char    ("x_type"    , x_type);
    glLoadIdentity  ();
-   if      (x_type  == YVIEW_FLAT)     glOrtho         (x_min, x_max, y_min, y_max, -500, 500);
-   else if (x_type  == YVIEW_FLATISH)  glOrtho         (x_min, x_max, y_min, y_max, -500, 500);
+   if      (x_type  == YVIEW_FLAT)     glOrtho         (x_min, x_max, y_min, y_max,  -500, 500);
+   else if (x_type  == YVIEW_FLATISH)  glOrtho         (x_min, x_max, y_min, y_max, -1000, 1000);
    else                                gluPerspective  (45.0f, (GLfloat) x_len / (GLfloat) y_len, 0.01f, 4000.0f);
    glMatrixMode    (GL_MODELVIEW);
    /*---(background)---------------------*/

@@ -268,11 +268,11 @@ yviopengl_color_init    (void)
    /*---(globals)------------------------*//*-------------------------------------------------fg----bg--*/
    g_ncolor = 0;
    /*---(window parts)-------------------*/
-   yVIOPENGL_color  ("w_titl"    , "window, normal title"                               , '-' , 'K' );
-   yVIOPENGL_color  ("w_vers"    , "window, version number"                             , '-' , 'K' );
-   yVIOPENGL_color  ("w_sbar"    , "window, normal status"                              , '-' , 'K' );
-   yVIOPENGL_color  ("w_cmds"    , "window, command message"                            , 'K' , '·' );
-   yVIOPENGL_color  ("w_keys"    , "window, keystoke display"                           , 'K' , '-' );
+   yVIOPENGL_color  ("w_titl"    , "window, normal title"                               , 'k' , 'O' );
+   yVIOPENGL_color  ("w_vers"    , "window, version number"                             , 'k' , 'o' );
+   yVIOPENGL_color  ("w_sbar"    , "window, normal status"                              , 'k' , 'o' );
+   yVIOPENGL_color  ("w_cmds"    , "window, command message"                            , 'k' , 'o' );
+   yVIOPENGL_color  ("w_keys"    , "window, keystoke display"                           , 'k' , 'O' );
    /*---(universes)----------------------*/
    yVIOPENGL_color  ("u_back"    , "window, universe/buffers"                           , 'K' , '-' );
    yVIOPENGL_color  ("u_curr"    , "window, universe/buffers"                           , 'A' , '-' );
