@@ -117,15 +117,26 @@ yviopengl__text         (char a_part)
          glVertex3f  (x_min    , y_min    ,  100);
       } glEnd   ();
       switch (a_part) {
-      case YVIEW_TITLE    :  yVIOPENGL_by_name ("w_titl", '-', 1.00);  break;
-      case YVIEW_VERSION  :  yVIOPENGL_by_name ("w_vers", '-', 1.00);  break;
-      case YVIEW_STATUS   :  yVIOPENGL_by_name ("w_sbar", '-', 1.00);  break;
-      case YVIEW_KEYS     :  yVIOPENGL_by_name ("w_keys", '-', 1.00);  break;
-      case YVIEW_MODES    :  yVIOPENGL_by_name ("w_keys", '-', 1.00);  break;
-      }
-      if (a_part == YVIEW_KEYS) {
+      case YVIEW_TITLE    :
+         yVIOPENGL_by_name ("w_titl", '-', 1.00);
+         break;
+      case YVIEW_VERSION  :
+         yVIOPENGL_by_name ("w_vers", '-', 1.00);
+         break;
+      case YVIEW_STATUS   :
          if      (yKEYS_is_locked () == 1) yVIOPENGL_by_name ("!_errs", '-', 1.00);
          else if (yKEYS_is_error  () == 1) yVIOPENGL_by_name ("!_warn", '-', 1.00);
+         else                              yVIOPENGL_by_name ("w_sbar", '-', 1.00);
+         break;
+      case YVIEW_KEYS     :
+         if      (yKEYS_is_locked () == 1) yVIOPENGL_by_name ("!_errs", '-', 1.00);
+         else if (yKEYS_is_error  () == 1) yVIOPENGL_by_name ("!_warn", '-', 1.00);
+         else                              yVIOPENGL_by_name ("w_keys", '-', 1.00);
+         break;
+      case YVIEW_MODES    :
+         if (yMACRO_exe_mode () == MACRO_RUN)  yVIOPENGL_by_name ("!_warn", '-', 1.00);
+         else                                  yVIOPENGL_by_name ("w_keys", '-', 1.00);
+         break;
       }
       glBegin         (GL_POLYGON); {
          glVertex3f  (x_min + 2, y_max - 2,  110);
@@ -378,20 +389,20 @@ yviopengl__display         (char a_part, char a_loc, char a_style)
    glPushMatrix    (); {
       glColor4f (0.0, 0.0, 0.0, 1.0);
       glBegin         (GL_POLYGON); {
-         glVertex3f  (x_min    , y_max    ,  100);
-         glVertex3f  (x_max    , y_max    ,  100);
-         glVertex3f  (x_max    , y_min    ,  100);
-         glVertex3f  (x_min    , y_min    ,  100);
+         glVertex3f  (x_min    , y_max    ,  900);
+         glVertex3f  (x_max    , y_max    ,  900);
+         glVertex3f  (x_max    , y_min    ,  900);
+         glVertex3f  (x_min    , y_min    ,  900);
       } glEnd   ();
       x_edit = yviopengl__color (a_part);
       glBegin         (GL_POLYGON); {
-         glVertex3f  (x_min + 2, y_max - 2,  110);
-         glVertex3f  (x_max - 2, y_max - 2,  110);
-         glVertex3f  (x_max - 2, y_min + 2,  110);
-         glVertex3f  (x_min + 2, y_min + 2,  110);
+         glVertex3f  (x_min + 2, y_max - 2,  910);
+         glVertex3f  (x_max - 2, y_max - 2,  910);
+         glVertex3f  (x_max - 2, y_min + 2,  910);
+         glVertex3f  (x_min + 2, y_min + 2,  910);
       } glEnd   ();
       glColor4f (0.00, 0.00, 0.00, 1.00);
-      glTranslatef (x_min + 2.0, y_min + 2.0, 120.0f);
+      glTranslatef (x_min + 2.0, y_min + 2.0, 920.0f);
       yFONT_print  (myVIOPENGL.fixed, 8, YF_BOTLEF, t);
    } glPopMatrix   ();
    DEBUG_GRAF   yLOG_char    ("x_edit"    , x_edit);

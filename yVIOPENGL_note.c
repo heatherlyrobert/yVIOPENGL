@@ -92,7 +92,7 @@ yviopengl_notes_line    (char c, short xb, short yb, short xe, short ye)
    if (c == '-')    return 0;
    /*---(header)-------------------------*/
    DEBUG_GRAF   yLOG_enter   (__FUNCTION__);
-   DEBUG_GRAF   yLOG_complex ("args"       , "%c  %4dx %4dy  %4dx %4dy", c, xb, yb, xe, ye);
+   DEBUG_GRAF   yLOG_complex ("args"       , "%c/%3d  %4dx %4dy  %4dx %4dy", c, c, xb, yb, xe, ye);
    /*---(origin)-------------------------*/
    glColor4f (0.0, 0.0, 0.0, 1.0);
    glBegin(GL_POLYGON); {
@@ -102,6 +102,8 @@ yviopengl_notes_line    (char c, short xb, short yb, short xe, short ye)
       glVertex3f (xb + x_side, yb + x_side, z);
    } glEnd();
    /*---(first leg)----------------------*/
+   glLineWidth (2.0);
+   glColor4f (0.0, 0.0, 0.0, 1.0);
    switch (c) {
    case 'Ô' : case '1' : case '8' :
    case 'Õ' : case '4' : case '5' :
@@ -111,6 +113,7 @@ yviopengl_notes_line    (char c, short xb, short yb, short xe, short ye)
          glVertex3f (xb         , ye         , z);
       } glEnd();
       break;
+   default  :
    case '×' : case '6' : case '7' :
    case 'Ö' : case '2' : case '3' :
       DEBUG_GRAF   yLOG_note    ("horizontal first (2,3,6,7)");
@@ -119,10 +122,9 @@ yviopengl_notes_line    (char c, short xb, short yb, short xe, short ye)
          glVertex3f (xe         , yb         , z);
       } glEnd();
       break;
-   default  :
-      break;
    }
    /*---(second leg)---------------------*/
+   glColor4f (0.0, 0.0, 0.0, 1.0);
    switch (c) {
    case '1' : case '4' :
    case '5' : case '8' :
@@ -132,6 +134,7 @@ yviopengl_notes_line    (char c, short xb, short yb, short xe, short ye)
          glVertex3f (xe         , ye         , z);
       } glEnd();
       break;
+   default  :
    case '2' : case '7' :
    case '3' : case '6' :
       DEBUG_GRAF   yLOG_note    ("vertical second (2,3,6,7)");

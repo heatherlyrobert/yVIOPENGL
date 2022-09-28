@@ -62,7 +62,8 @@ yviopengl_menu__back     (char a_lvl, short x_min, short x_cen, short x_max, sho
          glVertex3f  (x_max - 32, y_min    ,  120);
       } glEnd   ();
       glTranslatef (0.0  , 0.0  ,  10.0);
-      glColor4f (0.70, 0.35, 0.15, 1.00);
+      if (yKEYS_is_locked ())  glColor4f (0.75, 0.75, 0.75, 1.00);
+      else                     glColor4f (0.70, 0.35, 0.15, 1.00);
       for (i = 0; i < 360; i += (360.0 / 18.0)) {
          glPushMatrix    (); {
             glTranslatef (x_cen, y_mid, 0.0);
@@ -140,25 +141,20 @@ yviopengl_menus         (void)
    DEBUG_GRAF   yLOG_value   ("x_lock"    , x_lock);
    /*---(header/footer)------------------*/
    glPushMatrix    (); {
+      if (x_lock == 1)  glColor4f (1.00, 1.00, 1.00, 1.00);
+      else              glColor4f (0.00, 0.00, 0.00, 1.00);
       /*> glTranslatef (x_cen, y_mid, 880.0);                                         <*/
       switch (x_lvl) {
       case  0 : strlcpy (t, " main menu ", LEN_HUND); break;
       case  1 : sprintf (t, " %s sub-menu ", s);      break;
       case  2 : sprintf (t, " %s options " , s);      break;
       }
-      glColor4f (0.00, 0.00, 0.00, 1.00);
       glPushMatrix    (); {
          glTranslatef (x_cen, y_max - 15, 1000.0);
          yFONT_print  (myVIOPENGL.fixed, 8, YF_BOTCEN, t);
          glTranslatef ( 0.00, 18 - y_dif, 0.0);
-         if (x_lock == 1) {
-            glColor4f (0.80, 0.80, 0.80, 1.00);
-            yFONT_print  (myVIOPENGL.fixed, 8, YF_BOTCEN, "bad key, locked, ее to exit");
-            glColor4f (0.00, 0.00, 0.00, 1.00);
-         }
-         else   {
-            yFONT_print  (myVIOPENGL.fixed, 8, YF_BOTCEN, "wider, flatter, and universal");
-         }
+         if (x_lock == 1) yFONT_print  (myVIOPENGL.fixed, 8, YF_BOTCEN, "bad key, locked, ее to exit");
+         else             yFONT_print  (myVIOPENGL.fixed, 8, YF_BOTCEN, "wider, flatter, and universal");
       } glPopMatrix   ();
       if (x_lvl > 0) {
          sprintf (t, "╡%s", b);

@@ -305,7 +305,7 @@ yviopengl_color_init    (void)
    yVIOPENGL_color  ("m_cant"    , "menu, item not available"                           , 'O' , 'y' );
    yVIOPENGL_color  ("m_errs"    , "menu, item in error"                                , 'R' , 'y' );
    /*---(menus)----------*/
-   yVIOPENGL_color  ("m_main"    , "note, main title/subject"                           , '!' , 'M' );
+   yVIOPENGL_color  ("m_main"    , "note, main title/subject"                           , '-' , 'R' );
    yVIOPENGL_color  ("m_warn"    , "note, displaying a warning"                         , '!' , 'R' );
    yVIOPENGL_color  ("m_curr"    , "note, current note item"                            , '-' , 'Y' );
    yVIOPENGL_color  ("m_prev"    , "note, old note item"                                , 'Y' , 'y' );
