@@ -36,8 +36,8 @@
 
 #define     P_VERMAJOR  "2.--, clean, improve, and expand"
 #define     P_VERMINOR  "2.0-, break out yVIKEYS into curses and opengl"
-#define     P_VERNUM    "2.0e"
-#define     P_VERTXT    "small modifications to support petal demo"
+#define     P_VERNUM    "2.0f"
+#define     P_VERTXT    "added note and line masking to the library ;)"
 
 #define     P_PRIORITY  "direct, simple, brief, vigorous, and lucid (h.w. fowler)"
 #define     P_PRINCIPAL "[grow a set] and build your wings on the way down (r. bradbury)"
@@ -103,6 +103,7 @@ extern int     g_ncolor;
 
 typedef    struct    cMY    tMY;
 struct cMY {
+   char        title    [LEN_HUND];
    int         wide;              /* maximum x-coordinate                    */
    int         tall;              /* maximum y-coordinate                    */
    int         x_cur;
@@ -122,7 +123,7 @@ extern char g_print       [LEN_RECD];
 /*===[[ yVIOPENGL_base.c ]]===================================================*/
 /*345678901-12345678901-12345678901-12345678901-12345678901-12345678901-123456*/
 /*---(program)--------------*/
-char        yVIOPENGL_init          (char *a_title, char *a_version, char a_mode, int a_wide, int a_tall);
+char        yVIOPENGL_init          (char *a_title, char *a_version, char a_mode, short a_wide, short a_tall);
 char        yVIOPENGL_wrap          (void);
 char        yVIOPENGL_main          (char *a_delay, char *a_update, void *a_altinput);
 /*---(unittest)-------------*/

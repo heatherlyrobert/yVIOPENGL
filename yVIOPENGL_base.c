@@ -35,61 +35,49 @@ yVIOPENGL_version       (void)
 
 
 char
-yVIOPENGL_init          (char *a_title, char *a_version, char a_mode, int a_wide, int a_tall)
+yVIOPENGL_init          (char *a_title, char *a_version, char a_mode, short a_wide, short a_tall)
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
    char        rc          =    0;
    /*---(header)-------------------------*/
    DEBUG_GRAF   yLOG_enter   (__FUNCTION__);
-   /*---(start window)-------------------*/
-   rc = yX11_start (a_title, a_wide, a_tall, YX_FOCUSABLE, YX_FIXED, '-');
-   DEBUG_GRAF   yLOG_value   ("yX11"    , rc);
-   --rce;  if (rc < 0) {
+   /*---(defense)------------------------*/
+   DEBUG_GRAF   yLOG_point   ("a_title"   , a_title);
+   --rce;  if (a_title == NULL) {
       DEBUG_GRAF   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
+   DEBUG_GRAF   yLOG_info    ("a_title"   , a_title);
+   DEBUG_GRAF   yLOG_point   ("a_version" , a_version);
+   --rce;  if (a_title == NULL) {
+      DEBUG_GRAF   yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
+   }
+   DEBUG_GRAF   yLOG_info    ("a_version" , a_version);
+   DEBUG_GRAF   yLOG_value   ("a_version" , a_version);
+   --rce;  if (a_title == NULL) {
+      DEBUG_GRAF   yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(start window)-------------------*/
+   /*> rc = yX11_start (a_title, a_wide, a_tall, YX_FOCUSABLE, YX_FIXED, '-');        <* 
+    *> DEBUG_GRAF   yLOG_value   ("yX11"    , rc);                                    <* 
+    *> --rce;  if (rc < 0) {                                                          <* 
+    *>    DEBUG_GRAF   yLOG_exitr   (__FUNCTION__, rce);                              <* 
+    *>    return rce;                                                                 <* 
+    *> }                                                                              <*/
    myVIOPENGL.wide = a_wide;
    myVIOPENGL.tall = a_tall;
-   /*---(color)--------------------------*/
-   DEBUG_GRAF   yLOG_note    ("clearing");
-   /*> glClearColor    (1.0f, 1.0f, 1.0f, 1.0f);                                      <*/
-   glClearColor    (0.3f, 0.3f, 0.3f, 1.0f);
-   glClearDepth    (1.0f);
-   /*---(textures)-----------------------*/
-   DEBUG_GRAF   yLOG_note    ("textures");
-   glEnable        (GL_TEXTURE_2D);    /* NEW */
-   /*---(blending)-----------------------*/
-   DEBUG_GRAF   yLOG_note    ("blending");
-   glShadeModel    (GL_SMOOTH);
-   glEnable        (GL_DEPTH_TEST);
-   glEnable        (GL_ALPHA_TEST);
-   glAlphaFunc     (GL_GEQUAL, 0.0125);
-   glEnable        (GL_BLEND);
-   glBlendFunc     (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-   glDepthFunc     (GL_LEQUAL);
-   /*---(anti-aliasing)------------------*/
-   DEBUG_GRAF   yLOG_note    ("anti-aliasing");
-   glHint          (GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-   /*---(special polygon antialiasing)----------*/
-   DEBUG_GRAF   yLOG_note    ("polygon");
-   glEnable        (GL_POLYGON_SMOOTH);
-   glPolygonMode   (GL_FRONT_AND_BACK, GL_FILL);
-   glHint          (GL_POLYGON_SMOOTH_HINT, GL_NICEST);
-   /*---(simple defaulting)--------------*/
-   DEBUG_GRAF   yLOG_note    ("sizes");
-   glLineWidth     (0.50f);
-   /*---(process immediately)------------*/
-   DEBUG_GRAF   yLOG_note    ("flush");
-   glFlush         ();
+   strlcpy (myVIOPENGL.title, a_title, LEN_HUND);
    /*---(color options)------------------*/
-   rc = yCOLOR_init     (YCOLOR_WHEEL );
-   /*> yVIKEYS_cmds_addX (YVIKEYS_M_VIEW  , "palette"     , ""    , "isss" , yCOLOR_palette             , "" );   <* 
-    *> yVIKEYS_cmds_addX (YVIKEYS_M_VIEW  , "wheel"       , ""    , "s"    , yCOLOR_wheel               , "" );   <* 
-    *> yVIKEYS_cmds_addX (YVIKEYS_M_VIEW  , "degree"      , "deg" , "i"    , yCOLOR_deg                 , "" );   <* 
-    *> yVIKEYS_cmds_addX (YVIKEYS_M_VIEW  , "harmony"     , "har" , "s"    , yCOLOR_harm                , "" );   <* 
-    *> yVIKEYS_cmds_addX (YVIKEYS_M_VIEW  , "value"       , "val" , "s"    , yCOLOR_val                 , "" );   <* 
-    *> yVIKEYS_cmds_addX (YVIKEYS_M_VIEW  , "saturation"  , "sat" , "s"    , yCOLOR_sat                 , "" );   <*/
+   rc = yCOLOR_init     ();
+   yCMD_add (YCMD_M_VIEW   , "palette"     , ""    , "isss" , yCOLOR_palette             , "" );
+   yCMD_add (YCMD_M_VIEW   , "wheel"       , ""    , "s"    , yCOLOR_wheel               , "" );
+   yCMD_add (YCMD_M_VIEW   , "degree"      , "deg" , "i"    , yCOLOR_deg                 , "" );
+   yCMD_add (YCMD_M_VIEW   , "harmony"     , "har" , "s"    , yCOLOR_harm                , "" );
+   yCMD_add (YCMD_M_VIEW   , "value"       , "val" , "s"    , yCOLOR_val                 , "" );
+   yCMD_add (YCMD_M_VIEW   , "saturation"  , "sat" , "s"    , yCOLOR_sat                 , "" );
    yCOLOR_diff_scheme (YCOLOR_WHITE);
    yviopengl_color_init ();
    /*----(first)-------------------------*/
@@ -153,23 +141,17 @@ yVIOPENGL_init          (char *a_title, char *a_version, char a_mode, int a_wide
       DEBUG_GRAF   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
-   rc = yviopengl_font_load  ();
-   DEBUG_GRAF   yLOG_value   ("font"    , rc);
-   --rce;  if (rc < 0) {
-      DEBUG_GRAF   yLOG_exitr   (__FUNCTION__, rce);
-      return rce;
-   }
    /*---(curses drawing)-----------------*/
-   yVIEW_simple (YVIEW_TITLE  , 0, yviopengl_title);
-   yVIEW_simple (YVIEW_VERSION, 0, yviopengl_version);
-   yVIEW_simple (YVIEW_MODES  , 0, yviopengl_modes);
-   yVIEW_simple (YVIEW_STATUS , 0, yviopengl_status);
-   yVIEW_simple (YVIEW_COMMAND, 0, yviopengl_command);
-   yVIEW_simple (YVIEW_FORMULA, 0, yviopengl_formula);
-   yVIEW_simple (YVIEW_FLOAT  , 0, yviopengl_float);
-   yVIEW_simple (YVIEW_KEYS   , 0, yviopengl_keys);
-   yVIEW_simple (YVIEW_BUFFER , 0, yviopengl_univs);
-   yVIEW_simple (YVIEW_NOTES  , 0, yviopengl_notes);
+   yVIEW_simple (YVIEW_TITLE  , -1, 0, yviopengl_title);
+   yVIEW_simple (YVIEW_VERSION, -1, 0, yviopengl_version);
+   yVIEW_simple (YVIEW_MODES  , -1, 0, yviopengl_modes);
+   yVIEW_simple (YVIEW_STATUS , -1, 0, yviopengl_status);
+   yVIEW_simple (YVIEW_COMMAND, -1, 0, yviopengl_command);
+   yVIEW_simple (YVIEW_FORMULA, -1, 0, yviopengl_formula);
+   yVIEW_simple (YVIEW_FLOAT  , -1, 0, yviopengl_float);
+   yVIEW_simple (YVIEW_KEYS   , -1, 0, yviopengl_keys);
+   yVIEW_simple (YVIEW_BUFFER , -1, 0, yviopengl_univs);
+   yVIEW_simple (YVIEW_NOTES  , -1, 0, yviopengl_notes);
    yVIEW_menus  (yviopengl_menus);
    myVIOPENGL.p_formula = 's';
    yVIEW_switch_add (YVIEW_FORMULA, "min"  , "", yviopengl_formula_min  , "minimal formula display");
@@ -182,13 +164,83 @@ yVIOPENGL_init          (char *a_title, char *a_version, char a_mode, int a_wide
 }
 
 char
-yVIOPENGL_wrap                 (void)
+yVIOPENGL_dawn                 (void)
+{
+   /*---(locals)-----------+-----+-----+-*/
+   char        rce         =  -10;
+   char        rc          =    0;
+   /*---(header)----------------------*/
+   DEBUG_GRAF   yLOG_enter   (__FUNCTION__);
+   /*---(start window)-------------------*/
+   rc = yX11_start (myVIOPENGL.title, myVIOPENGL.wide, myVIOPENGL.tall, YX_FOCUSABLE, YX_FIXED, '-');
+   DEBUG_GRAF   yLOG_value   ("yX11"    , rc);
+   --rce;  if (rc < 0) {
+      DEBUG_GRAF   yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(color)--------------------------*/
+   DEBUG_GRAF   yLOG_note    ("clearing");
+   /*> glClearColor    (1.0f, 1.0f, 1.0f, 1.0f);                                      <*/
+   yVIEW_color_clear (YVIEW_MAIN);
+   /*> glClearColor    (0.3f, 0.3f, 0.3f, 1.0f);                                      <*/
+   /*> glClearDepth    (1.0f);                                                        <*/
+   /*---(textures)-----------------------*/
+   DEBUG_GRAF   yLOG_note    ("textures");
+   glEnable        (GL_TEXTURE_2D);    /* NEW */
+   /*---(blending)-----------------------*/
+   DEBUG_GRAF   yLOG_note    ("blending");
+   glShadeModel    (GL_SMOOTH);
+   glEnable        (GL_DEPTH_TEST);
+   glEnable        (GL_ALPHA_TEST);
+   glAlphaFunc     (GL_GEQUAL, 0.0125);
+   glEnable        (GL_BLEND);
+   glBlendFunc     (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+   glDepthFunc     (GL_LEQUAL);
+   /*---(anti-aliasing)------------------*/
+   DEBUG_GRAF   yLOG_note    ("anti-aliasing");
+   glHint          (GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+   /*---(special polygon antialiasing)----------*/
+   DEBUG_GRAF   yLOG_note    ("polygon");
+   glEnable        (GL_POLYGON_SMOOTH);
+   glPolygonMode   (GL_FRONT_AND_BACK, GL_FILL);
+   glHint          (GL_POLYGON_SMOOTH_HINT, GL_NICEST);
+   /*---(simple defaulting)--------------*/
+   DEBUG_GRAF   yLOG_note    ("sizes");
+   glLineWidth     (0.50f);
+   /*---(process immediately)------------*/
+   DEBUG_GRAF   yLOG_note    ("flush");
+   glFlush         ();
+   /*---(load fonts)---------------------*/
+   rc = yviopengl_font_load  ();
+   DEBUG_GRAF   yLOG_value   ("font"    , rc);
+   --rce;  if (rc < 0) {
+      DEBUG_GRAF   yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(complete)-----------------------*/
+   DEBUG_GRAF   yLOG_exit    (__FUNCTION__);
+   return 0;
+}
+
+char
+yVIOPENGL_dusk                 (void)
 {
    /*---(header)----------------------*/
    DEBUG_GRAF   yLOG_enter   (__FUNCTION__);
    /*---(shutdown ncurses)------------*/
    yviopengl_font_close ();
    yX11_end  ();
+   /*---(complete)-----------------------*/
+   DEBUG_GRAF   yLOG_exit    (__FUNCTION__);
+   return 0;
+}
+
+char
+yVIOPENGL_wrap                 (void)
+{
+   /*---(header)----------------------*/
+   DEBUG_GRAF   yLOG_enter   (__FUNCTION__);
+   /*---(free)---------------------------*/
    /*---(complete)-----------------------*/
    DEBUG_GRAF   yLOG_exit    (__FUNCTION__);
    return 0;

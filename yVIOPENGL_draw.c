@@ -12,11 +12,11 @@
  *
  */
 
-char        face_pretty [LEN_LABEL] = "sansation";
+static char        face_pretty [LEN_LABEL] = "sansation";
 /*> char   face_fixed  [30] = "comfortaa";                                            <*/
 /*> char   face_fixed [30] = "courier";                                               <*/
 /*> char        face_fixed  [LEN_LABEL] = "hack";                                     <*/
-char        face_fixed  [LEN_LABEL] = "shrike";
+static char        yviopengl_fixed  [LEN_LABEL] = "shrike";
 
 
 
@@ -30,7 +30,8 @@ yviopengl_font_load     (void)
 {
    char        rce         =  -10;
    DEBUG_GRAF   yLOG_senter   (__FUNCTION__);
-   myVIOPENGL.fixed  = yFONT_load(face_fixed);
+   DEBUG_GRAF   yLOG_snote    (yviopengl_fixed);
+   myVIOPENGL.fixed  = yFONT_load(yviopengl_fixed);
    DEBUG_GRAF   yLOG_sint     (myVIOPENGL.fixed);
    --rce;  if (myVIOPENGL.fixed <  0) {
       /*> fprintf(stderr, "Problem loading %s\n", face_fixed);                        <*/
@@ -38,6 +39,7 @@ yviopengl_font_load     (void)
       DEBUG_GRAF   yLOG_sexitr   (__FUNCTION__, rce);
       return rce;
    }
+   DEBUG_GRAF   yLOG_snote    (face_pretty);
    myVIOPENGL.pretty  = yFONT_load(face_pretty);
    DEBUG_GRAF   yLOG_sint     (myVIOPENGL.pretty);
    --rce;  if (myVIOPENGL.pretty <  0) {
@@ -91,20 +93,13 @@ yviopengl__text         (char a_part)
    DEBUG_GRAF   yLOG_enter   (__FUNCTION__);
    /*---(get size)-----------------------*/
    yVIEW_curses (a_part, x_name, &x_on, NULL, x_text, &x_orient, &x_left, &x_wide, &x_bott, &x_tall);
-   yVIEW_bounds (a_part, NULL, &x_anchor, NULL, &x_min, &x_max, &x_len, &y_min, &y_max, &y_len);
+   yVIEW_bounds (a_part, NULL, &x_anchor, &x_min, &x_max, &x_len, &y_min, &y_max, &y_len);
    DEBUG_GRAF   yLOG_complex (x_name, "%c on %c, x_min %4d, x_max %4d, y_min %4d, y_max %4d", a_part, x_on, x_min, x_max, y_min, y_max);
    if (x_on != 'y') {
       DEBUG_GRAF   yLOG_note    ("hidden, not marked for display");
       DEBUG_GRAF   yLOG_exit    (__FUNCTION__);
       return 0;
    }
-   /*---(setup view)---------------------*/
-   /*> DEBUG_GRAF   yLOG_note    ("set up the view");                                 <*/
-   /*> glViewport      (x_left, x_bott, x_wide, x_tall);                              <* 
-    *> glMatrixMode    (GL_PROJECTION);                                               <* 
-    *> glLoadIdentity  ();                                                            <* 
-    *> glOrtho         (x_min, x_max, y_min, y_max, -500, 500);                       <* 
-    *> glMatrixMode    (GL_MODELVIEW);                                                <*/
    /*---(background)---------------------*/
    DEBUG_GRAF   yLOG_note    ("draw a background for ortho/flat");
    /*---(test for editing)---------------*/
@@ -116,85 +111,49 @@ yviopengl__text         (char a_part)
          glVertex3f  (x_max    , y_min    ,  100);
          glVertex3f  (x_min    , y_min    ,  100);
       } glEnd   ();
-      switch (a_part) {
-      case YVIEW_TITLE    :
-         yVIOPENGL_by_name ("w_titl", '-', 1.00);
-         break;
-      case YVIEW_VERSION  :
-         yVIOPENGL_by_name ("w_vers", '-', 1.00);
-         break;
-      case YVIEW_STATUS   :
-         if      (yKEYS_is_locked () == 1) yVIOPENGL_by_name ("!_errs", '-', 1.00);
-         else if (yKEYS_is_error  () == 1) yVIOPENGL_by_name ("!_warn", '-', 1.00);
-         else                              yVIOPENGL_by_name ("w_sbar", '-', 1.00);
-         break;
-      case YVIEW_KEYS     :
-         if      (yKEYS_is_locked () == 1) yVIOPENGL_by_name ("!_errs", '-', 1.00);
-         else if (yKEYS_is_error  () == 1) yVIOPENGL_by_name ("!_warn", '-', 1.00);
-         else                              yVIOPENGL_by_name ("w_keys", '-', 1.00);
-         break;
-      case YVIEW_MODES    :
-         if (yMACRO_exe_mode () == MACRO_RUN)  yVIOPENGL_by_name ("!_warn", '-', 1.00);
-         else                                  yVIOPENGL_by_name ("w_keys", '-', 1.00);
-         break;
-      }
+      DEBUG_GRAF   yLOG_char    ("a_part"    , a_part);
+      yVIEW_color_back (a_part);
+      /*> switch (a_part) {                                                                   <* 
+       *> case YVIEW_TITLE    :                                                               <* 
+       *>    yVIOPENGL_by_name ("w_titl", '-', 1.00);                                         <* 
+       *>    break;                                                                           <* 
+       *> case YVIEW_VERSION  :                                                               <* 
+       *>    yVIOPENGL_by_name ("w_vers", '-', 1.00);                                         <* 
+       *>    break;                                                                           <* 
+       *> case YVIEW_STATUS   :                                                               <* 
+       *>    if      (yKEYS_is_locked () == 1) yVIOPENGL_by_name ("!_errs", '-', 1.00);       <* 
+       *>    else if (yKEYS_is_error  () == 1) yVIOPENGL_by_name ("!_warn", '-', 1.00);       <* 
+       *>    else                              yVIOPENGL_by_name ("w_sbar", '-', 1.00);       <* 
+       *>    break;                                                                           <* 
+       *> case YVIEW_KEYS     :                                                               <* 
+       *>    if      (yKEYS_is_locked () == 1) yVIOPENGL_by_name ("!_errs", '-', 1.00);       <* 
+       *>    else if (yKEYS_is_error  () == 1) yVIOPENGL_by_name ("!_warn", '-', 1.00);       <* 
+       *>    else                              yVIOPENGL_by_name ("w_keys", '-', 1.00);       <* 
+       *>    break;                                                                           <* 
+       *> case YVIEW_MODES    :                                                               <* 
+       *>    if (yMACRO_exe_mode () == MACRO_RUN)  yVIOPENGL_by_name ("!_warn", '-', 1.00);   <* 
+       *>    else                                  yVIOPENGL_by_name ("w_keys", '-', 1.00);   <* 
+       *>    break;                                                                           <* 
+       *> }                                                                                   <*/
       glBegin         (GL_POLYGON); {
          glVertex3f  (x_min + 2, y_max - 2,  110);
          glVertex3f  (x_max - 2, y_max - 2,  110);
          glVertex3f  (x_max - 2, y_min + 2,  110);
          glVertex3f  (x_min + 2, y_min + 2,  110);
       } glEnd   ();
-      /*> glColor4f (0.00, 0.00, 0.00, 1.00);                                         <* 
-       *> glTranslatef (x_min + 2.0, y_min + 2.0, 120.0f);                            <* 
-       *> yFONT_print  (myVIOPENGL.fixed, 8, YF_BOTLEF, t);                           <*/
    } glPopMatrix   ();
-   /*> glPushMatrix    (); {                                                                      <* 
-    *>    /+> DEBUG_GRAF   yLOG_value   ("color"     , s_parts [n].color);             <+/        <* 
-    *>    /+> yVIKEYS_view_color (s_parts [n].color, 1.0);                                  <*    <* 
-    *>     *> if (s_parts [n].color < 0)                                                    <*    <* 
-    *>     *>    glColor4f    (1.00f, 0.50f, 0.50f, 1.0f);                                  <*    <* 
-    *>     *> if (s_parts [n].abbr == YVIKEYS_VERSION && yURG_debugmode () == 'y')          <*    <* 
-    *>     *>    glColor4f    (1.00f, 0.00f, 0.00f, 1.0f);                                  <*    <* 
-    *>     *> if (s_parts [n].abbr == YVIKEYS_STATUS  && yVIKEYS_error  ())                 <*    <* 
-    *>     *>    glColor4f    (1.00f, 0.00f, 0.00f, 1.0f);                                  <*    <* 
-    *>     *> if (s_parts [n].abbr == YVIKEYS_MODES   && yMACRO_exe_mode () == MACRO_RUN)   <*    <* 
-    *>     *>    glColor4f    (1.00f, 0.00f, 0.00f, 1.0f);                                  <+/   <* 
-    *>    /+> yCOLOR_diff_color (a_part, 0.5);                                         <+/        <* 
-    *>    /+> glColor4f (0.00, 0.00, 0.00, 1.00);                                         <*      <* 
-    *>     *> glBegin         (GL_POLYGON); {                                             <*      <* 
-    *>     *>    glVertex3f  (x_min, y_max,  -80);                                        <*      <* 
-    *>     *>    glVertex3f  (x_max, y_max,  -80);                                        <*      <* 
-    *>     *>    glVertex3f  (x_max, y_min,  -80);                                        <*      <* 
-    *>     *>    glVertex3f  (x_min, y_min,  -80);                                        <*      <* 
-    *>     *> } glEnd   ();                                                               <+/     <* 
-    *>    glColor4f (0.0, 0.0, 0.0, 1.0);                                                         <* 
-    *>    glBegin         (GL_POLYGON); {                                                         <* 
-    *>       glVertex3f  (x_min    , y_max    ,  100);                                            <* 
-    *>       glVertex3f  (x_max    , y_max    ,  100);                                            <* 
-    *>       glVertex3f  (x_max    , y_min    ,  100);                                            <* 
-    *>       glVertex3f  (x_min    , y_min    ,  100);                                            <* 
-    *>    } glEnd   ();                                                                           <* 
-    *>    glColor4f (0.75, 0.75, 0.00, 1.00);                                                     <* 
-    *>    glBegin         (GL_POLYGON); {                                                         <* 
-    *>       glVertex3f  (x_min + 2, y_max - 2,  -60);                                            <* 
-    *>       glVertex3f  (x_max - 0, y_max - 2,  -60);                                            <* 
-    *>       glVertex3f  (x_max - 0, y_min + 2,  -60);                                            <* 
-    *>       glVertex3f  (x_min + 2, y_min + 2,  -60);                                            <* 
-    *>    } glEnd   ();                                                                           <* 
-    *> } glPopMatrix   ();                                                                        <*/
    /*---(display text)-------------------*/
    DEBUG_GRAF   yLOG_info    ("x_text"    , x_text);
    if (strlen (x_text) > 0) {
       glPushMatrix    (); {
          if (x_orient == 'r') {
-            glTranslatef (-2.0f, 5.0f, 120.0f);
+            glTranslatef (-2.0f, 5.0f, 965.0f);
             glRotatef    ( 90.0, 0.0f, 0.0f, 1.0f);
          } else {
-            glTranslatef ( 3.0f, 2.0f, 120.0f);
+            glTranslatef ( 3.0f, 2.0f, 965.0f);
          }
-         /*> yVIKEYS_view_color_adj (s_parts [n].color, YCOLOR_MIN, 0.8);             <*/
-         glColor4f (0.00, 0.00, 0.00, 1.00);
-         /*> yFONT_print  (myVIKEYS.font, myVIKEYS.point, YF_BOTLEF, x_text);         <*/
+         if (yVIEW_color_font (a_part) <= 4)  glColor4f (0.0, 0.0, 0.0, 1.0);
+         else                                 glColor4f (1.0, 1.0, 1.0, 1.0);
          yFONT_print  (myVIOPENGL.fixed, 8, YF_BOTLEF, x_text);
       } glPopMatrix   ();
    }
@@ -235,35 +194,35 @@ yviopengl_univs         (void)
    int         x_off       =    2;
    ushort      c           =    0;
    DEBUG_GRAF   yLOG_enter   (__FUNCTION__);
-   yVIEW_curses (YVIEW_BUFFER, x_name, &x_on, NULL, NULL, NULL, &x_left, &x_wide, &x_bott, &x_tall);
-   DEBUG_GRAF   yLOG_complex  (x_name, "%c on %c, %3dl, %3dw, %3db, %3dt", YVIEW_BUFFER, x_on, x_left, x_wide, x_bott, x_tall);
-   /*> sprintf (x_main, "%s%s%s", BACK_YEL, BOLD_BLK, x_univ);                        <*/
-   yVIOPENGL_by_name ("u_back", '-', 1.00);
-   mvprintw (x_bott, x_left, "%-*.*s", x_wide, x_wide, x_disp);
-   rc = yMAP_by_cursor (YMAP_UNIV, YDLST_HEAD, &x_pos, &x_ref, NULL, &x_used);
-   yMAP_axis_grid (YMAP_UNIV , NULL, &c, NULL, NULL);
-   while (rc >= 0) {
-      DEBUG_GRAF   yLOG_complex  ("review", "%3d, %3d, %3d/%c", x_pos, x_ref, x_used, x_used);
-      if      (x_pos < 10)  x_off = 1;
-      else if (x_pos < 36)  x_off = 3;
-      else                  x_off = 5;
-      if (c == x_pos)  x_used = YMAP_CURR;
-      switch (x_used) {
-      case YMAP_CURR   :
-         yVIOPENGL_by_name ("u_curr", '-', 1.00);
-         mvprintw (x_bott, x_left +  x_off + (x_pos * 2), "%c", YSTR_UNIV [x_pos]);  break;
-         break;
-      case YMAP_USED  :
-         yVIOPENGL_by_name ("u_used", '-', 1.00);
-         mvprintw (x_bott, x_left +  x_off + (x_pos * 2), "%c", YSTR_UNIV [x_pos]);  break;
-         break;
-      case YMAP_PLACE :
-         yVIOPENGL_by_name ("u_place", '-', 1.00);
-         mvprintw (x_bott, x_left +  x_off + (x_pos * 2), "%c", YSTR_UNIV [x_pos]);  break;
-         break;
-      }
-      rc = yMAP_by_cursor (YMAP_UNIV, YDLST_NEXT, &x_pos, &x_ref, NULL, &x_used);
-   }
+   /*> yVIEW_curses (YVIEW_BUFFER, x_name, &x_on, NULL, NULL, NULL, &x_left, &x_wide, &x_bott, &x_tall);                              <* 
+    *> DEBUG_GRAF   yLOG_complex  (x_name, "%c on %c, %3dl, %3dw, %3db, %3dt", YVIEW_BUFFER, x_on, x_left, x_wide, x_bott, x_tall);   <* 
+    *> /+> sprintf (x_main, "%s%s%s", BACK_YEL, BOLD_BLK, x_univ);                        <+/                                         <* 
+    *> yVIOPENGL_by_name ("u_back", '-', 1.00);                                                                                       <* 
+    *> mvprintw (x_bott, x_left, "%-*.*s", x_wide, x_wide, x_disp);                                                                   <* 
+    *> rc = yMAP_by_cursor (YMAP_UNIV, YDLST_HEAD, &x_pos, &x_ref, NULL, &x_used);                                                    <* 
+    *> yMAP_axis_grid (YMAP_UNIV , NULL, &c, NULL, NULL);                                                                             <* 
+    *> while (rc >= 0) {                                                                                                              <* 
+    *>    DEBUG_GRAF   yLOG_complex  ("review", "%3d, %3d, %3d/%c", x_pos, x_ref, x_used, x_used);                                    <* 
+    *>    if      (x_pos < 10)  x_off = 1;                                                                                            <* 
+    *>    else if (x_pos < 36)  x_off = 3;                                                                                            <* 
+    *>    else                  x_off = 5;                                                                                            <* 
+    *>    if (c == x_pos)  x_used = YMAP_CURR;                                                                                        <* 
+    *>    switch (x_used) {                                                                                                           <* 
+    *>    case YMAP_CURR   :                                                                                                          <* 
+    *>       yVIOPENGL_by_name ("u_curr", '-', 1.00);                                                                                 <* 
+    *>       mvprintw (x_bott, x_left +  x_off + (x_pos * 2), "%c", YSTR_UNIV [x_pos]);  break;                                       <* 
+    *>       break;                                                                                                                   <* 
+    *>    case YMAP_USED  :                                                                                                           <* 
+    *>       yVIOPENGL_by_name ("u_used", '-', 1.00);                                                                                 <* 
+    *>       mvprintw (x_bott, x_left +  x_off + (x_pos * 2), "%c", YSTR_UNIV [x_pos]);  break;                                       <* 
+    *>       break;                                                                                                                   <* 
+    *>    case YMAP_PLACE :                                                                                                           <* 
+    *>       yVIOPENGL_by_name ("u_place", '-', 1.00);                                                                                <* 
+    *>       mvprintw (x_bott, x_left +  x_off + (x_pos * 2), "%c", YSTR_UNIV [x_pos]);  break;                                       <* 
+    *>       break;                                                                                                                   <* 
+    *>    }                                                                                                                           <* 
+    *>    rc = yMAP_by_cursor (YMAP_UNIV, YDLST_NEXT, &x_pos, &x_ref, NULL, &x_used);                                                 <* 
+    *> }                                                                                                                              <*/
    DEBUG_GRAF   yLOG_exit    (__FUNCTION__);
    return 0;
 }
@@ -327,15 +286,16 @@ yviopengl__color        (char a_part)
    DEBUG_GRAF   yLOG_note    ("assign a opengl color");
    DEBUG_GRAF   yLOG_char    ("x_code"    , x_code);
    switch (x_code) {
-   case  'm' :  yVIOPENGL_by_name ("i_maps", '-', 1.00);  break;
-   case  's' :  yVIOPENGL_by_name ("i_srcs", '-', 1.00);  break;
-   case  'c' :  yVIOPENGL_by_name ("w_cmds", '-', 1.00);  break;
-   case  't' :  yVIOPENGL_by_name ("i_treg", '-', 1.00);  break;
-   case  'r' :  yVIOPENGL_by_name ("i_repl", '-', 1.00);  break;
-   case  'i' :  yVIOPENGL_by_name ("i_inpt", '-', 1.00);  break;
-   case  'w' :  yVIOPENGL_by_name ("i_wand", '-', 1.00);  break;
-   case  'e' :  yVIOPENGL_by_name ("!_errs", '-', 1.00);  break;
-   default   :  yVIOPENGL_by_name ("i_maps", '-', 1.00);  break;
+   /*> case  'm' :  yVIOPENGL_by_name ("i_maps", '-', 1.00);  break;                  <*/
+   case  'm' :  yCOLOR_opengl (YCOLOR_BAS, YCOLOR_LIG, 1.0);    break;
+   case  'c' :  yCOLOR_opengl (YCOLOR_BAS, YCOLOR_LIG, 1.0);    break;
+   case  's' :  yCOLOR_opengl (YCOLOR_SPE, YCOLOR_SRC, 1.0);    break;
+   case  't' :  yCOLOR_opengl (YCOLOR_SPE, YCOLOR_REG, 1.0);    break;
+   case  'i' :  yCOLOR_opengl (YCOLOR_SPE, YCOLOR_INP, 1.0);    break;
+   case  'w' :  yCOLOR_opengl (YCOLOR_SPE, YCOLOR_WDR, 1.0);    break;
+   case  'e' :  yCOLOR_opengl (YCOLOR_SPE, YCOLOR_ERR, 1.0);    break;
+   /*> default   :  yVIOPENGL_by_name ("i_maps", '-', 1.00);  break;                  <*/
+   default   :  yVIEW_color (a_part, YCOLOR_ACC, 1.0);    break;
    }
    /*---(complete)-----------------------*/
    DEBUG_GRAF   yLOG_char    ("x_edit"    , x_edit);
@@ -370,7 +330,18 @@ yviopengl__display         (char a_part, char a_loc, char a_style)
    DEBUG_GRAF   yLOG_complex ("args"      , "%c part, %c loc, %c style", a_part, a_loc, a_style);
    /*---(get size)-----------------------*/
    yVIEW_curses (a_loc, x_name, &x_on, NULL, NULL, NULL, &x_left, &x_wide, &x_bott, &x_tall);
-   yVIEW_bounds (a_loc, &x_type, &x_anchor, NULL, &x_min, &x_max, &x_len, &y_min, &y_max, &y_len);
+   /*> yVIEW_bounds (a_loc, &x_type, &x_anchor, NULL, &x_min, &x_max, &x_len, &y_min, &y_max, &y_len);   <*/
+   if (a_loc != YVIEW_FLOAT) {
+      x_min = 0;
+      x_max = x_wide;
+      y_min = 0;
+      y_max = x_tall;
+   } else {
+      x_min = x_left;
+      x_max = x_left + x_wide;
+      y_min = x_bott;
+      y_max = x_bott + x_tall;
+   }
    DEBUG_GRAF   yLOG_complex (x_name, "%c on %c, x_min %4d, x_max %4d, y_min %4d, y_max %4d", a_part, x_on, x_min, x_max, y_min, y_max);
    if (x_on != 'y') {
       DEBUG_GRAF   yLOG_note    ("hidden, not marked for display");
@@ -389,20 +360,21 @@ yviopengl__display         (char a_part, char a_loc, char a_style)
    glPushMatrix    (); {
       glColor4f (0.0, 0.0, 0.0, 1.0);
       glBegin         (GL_POLYGON); {
-         glVertex3f  (x_min    , y_max    ,  900);
-         glVertex3f  (x_max    , y_max    ,  900);
-         glVertex3f  (x_max    , y_min    ,  900);
-         glVertex3f  (x_min    , y_min    ,  900);
+         glVertex3f  (x_min    , y_max    ,  950);
+         glVertex3f  (x_max    , y_max    ,  950);
+         glVertex3f  (x_max    , y_min    ,  950);
+         glVertex3f  (x_min    , y_min    ,  950);
       } glEnd   ();
       x_edit = yviopengl__color (a_part);
       glBegin         (GL_POLYGON); {
-         glVertex3f  (x_min + 2, y_max - 2,  910);
-         glVertex3f  (x_max - 2, y_max - 2,  910);
-         glVertex3f  (x_max - 2, y_min + 2,  910);
-         glVertex3f  (x_min + 2, y_min + 2,  910);
+         glVertex3f  (x_min + 2, y_max - 2,  960);
+         glVertex3f  (x_max - 2, y_max - 2,  960);
+         glVertex3f  (x_max - 2, y_min + 2,  960);
+         glVertex3f  (x_min + 2, y_min + 2,  960);
       } glEnd   ();
-      glColor4f (0.00, 0.00, 0.00, 1.00);
-      glTranslatef (x_min + 2.0, y_min + 2.0, 920.0f);
+      yVIEW_color (a_part, YCOLOR_MIN, 1.0);
+      /*> glColor4f (0.00, 0.00, 0.00, 1.00);                                         <*/
+      glTranslatef (x_min + 2.0, y_min + 2.0, 970.0f);
       yFONT_print  (myVIOPENGL.fixed, 8, YF_BOTLEF, t);
    } glPopMatrix   ();
    DEBUG_GRAF   yLOG_char    ("x_edit"    , x_edit);

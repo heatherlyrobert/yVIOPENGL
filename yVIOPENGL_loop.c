@@ -22,7 +22,8 @@ yviopengl_resize        (void)
    DEBUG_LOOP   yLOG_value   ("x_wide"    , x_wide);
    DEBUG_LOOP   yLOG_value   ("x_tall"    , x_tall);
    if (myVIOPENGL.wide != x_wide || myVIOPENGL.tall != x_tall) {
-      yX11_resize (x_wide, x_tall);
+      rc = yX11_resize (x_wide, x_tall);
+      DEBUG_LOOP   yLOG_value   ("yX11"      , rc);
       myVIOPENGL.wide = x_wide;
       myVIOPENGL.tall = x_tall;
       yVIEW_debug_list ();
@@ -122,10 +123,12 @@ yviopengl_cleanse       (void)
     *>    myVIKEYS.font_scale = yFONT_width (myVIKEYS.font, myVIKEYS.point);          <* 
     *>    DEBUG_GRAF   yLOG_double  ("font_scale", myVIKEYS.font_scale);              <* 
     *> }                                                                              <*/
-   yCOLOR_set_clear (YCOLOR_BAS_MED);
+   /*> yVIEW_color_set  (YVIEW_MAIN, 1.0);                                            <*/
+   /*> yCOLOR_set_clear (YCOLOR_BAS + YCOLOR_ACC);                                    <*/
    /*> glClearColor    (1.0f, 1.0f, 1.0f, 1.0f);                                   <*/
-   /*> glClearColor    (0.3f, 0.3f, 0.3f, 1.0f);                                   <*/
-   glClear         (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+   yVIEW_color_clear (YVIEW_MAIN);
+   /*> glClearColor    (0.0f, 0.0f, 0.0f, 1.0f);                                      <*/
+   glClear     (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
    return 0;
 }
 
@@ -158,12 +161,12 @@ yviopengl_prep          (char a_part)
       x_max = x_min + x_wide;
       y_min = x_bott;
       y_max = y_min + x_tall;
-      yVIEW_bounds (a_part, &x_type, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+      yVIEW_bounds (a_part, &x_type, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
       x_anchor = YVIEW_BOTLEF;
    } else {
       DEBUG_GRAF   yLOG_note    ("normal type");
       yVIEW_curses (a_part, x_name, &x_on, NULL, x_text, NULL, &x_left, &x_wide, &x_bott, &x_tall);
-      yVIEW_bounds (a_part, &x_type, &x_anchor, NULL, &x_min, &x_max, &x_len, &y_min, &y_max, &y_len);
+      yVIEW_bounds (a_part, &x_type, &x_anchor, &x_min, &x_max, &x_len, &y_min, &y_max, &y_len);
    }
    DEBUG_GRAF   yLOG_complex (x_name, "left %4d, wide %4d, bott %4d, tall %4d", x_left, x_wide, x_bott, x_tall);
    DEBUG_GRAF   yLOG_complex (x_name, "%c on %c, %c x_min %4d, x_max %4d, y_min %4d, y_max %4d", a_part, x_on, x_anchor, x_min, x_max, y_min, y_max);
@@ -172,6 +175,8 @@ yviopengl_prep          (char a_part)
       DEBUG_GRAF   yLOG_exit    (__FUNCTION__);
       return 0;
    }
+   /*---(clear)--------------------------*/
+   /*> yVIEW_color_clear (YVIEW_MAIN);                                                <*/
    /*---(setup view)---------------------*/
    DEBUG_GRAF   yLOG_note    ("set up the view");
    glViewport      (x_left, x_bott, x_wide, x_tall);
@@ -186,18 +191,9 @@ yviopengl_prep          (char a_part)
    if (x_type  == YVIEW_FLAT) {
       DEBUG_GRAF   yLOG_note    ("draw a background for ortho/flat");
       glPushMatrix    (); {
-         /*> DEBUG_GRAF   yLOG_value   ("color"     , s_parts [n].color);             <*/
-         /*> yVIKEYS_view_color (s_parts [n].color, 1.0);                                  <* 
-          *> if (s_parts [n].color < 0)                                                    <* 
-          *>    glColor4f    (1.00f, 0.50f, 0.50f, 1.0f);                                  <* 
-          *> if (s_parts [n].abbr == YVIKEYS_VERSION && yURG_debugmode () == 'y')          <* 
-          *>    glColor4f    (1.00f, 0.00f, 0.00f, 1.0f);                                  <* 
-          *> if (s_parts [n].abbr == YVIKEYS_STATUS  && yVIKEYS_error  ())                 <* 
-          *>    glColor4f    (1.00f, 0.00f, 0.00f, 1.0f);                                  <* 
-          *> if (s_parts [n].abbr == YVIKEYS_MODES   && yMACRO_exe_mode () == MACRO_RUN)   <* 
-          *>    glColor4f    (1.00f, 0.00f, 0.00f, 1.0f);                                  <*/
-         /*> yCOLOR_diff_color (a_part, 0.5);                                         <*/
-         glColor4f (0.00, 0.00, 0.00, 1.00);
+         /*> glColor4f (1.00, 0.00, 0.00, 1.00);                                      <*/
+         yVIEW_color_back (a_part);
+         /*> yCOLOR_opengl (YCOLOR_BAS, YCOLOR_ACC, 1.0);                             <*/
          glBegin         (GL_POLYGON); {
             glVertex3f  (x_min, y_max, -250);
             glVertex3f  (x_max, y_max, -250);
@@ -205,6 +201,8 @@ yviopengl_prep          (char a_part)
             glVertex3f  (x_min, y_min, -250);
          } glEnd   ();
       } glPopMatrix   ();
+   } else {
+      DEBUG_GRAF   yLOG_note    ("curses or overlay, no background");
    }
    DEBUG_GRAF   yLOG_exit    (__FUNCTION__);
    return 0;
