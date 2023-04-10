@@ -8,12 +8,12 @@ typedef  unsigned char        uchar;
 
 
 
-
 /*345678901-12345678901-12345678901-12345678901-12345678901-12345678901-123456*/
 /*---(base)-----------------*/
 char*       yVIOPENGL_version       (void);
 char        yVIOPENGL_init          (char *a_title, char *a_version, char a_mode, short a_wide, short a_tall);
 char        yVIOPENGL_dawn          (void);
+char        yVIOPENGL_resize        (char *a_title, short a_wide, short a_tall);
 char        yVIOPENGL_dusk          (void);
 char        yVIOPENGL_wrap          (void);
 char*       yVIOPENGL__unit         (char *a_question, char a_index);

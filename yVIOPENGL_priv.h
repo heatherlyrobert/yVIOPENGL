@@ -36,8 +36,8 @@
 
 #define     P_VERMAJOR  "2.--, clean, improve, and expand"
 #define     P_VERMINOR  "2.0-, break out yVIKEYS into curses and opengl"
-#define     P_VERNUM    "2.0f"
-#define     P_VERTXT    "added note and line masking to the library ;)"
+#define     P_VERNUM    "2.0g"
+#define     P_VERTXT    "added yVIOPENGL_resize to allow programs to easily change size"
 
 #define     P_PRIORITY  "direct, simple, brief, vigorous, and lucid (h.w. fowler)"
 #define     P_PRINCIPAL "[grow a set] and build your wings on the way down (r. bradbury)"
@@ -55,6 +55,7 @@
 #include    <yLOG.h>              /* heatherly program logging                */
 #include    <ySTR.h>              /* heatherly string processing              */
 /*---(custom vikeys)---------------------*/
+#include    <yVIHUB.h>            /* heatherly vikeys key handling           */
 #include    <yKEYS.h>             /* heatherly vikeys key handling           */
 #include    <yMODE.h>             /* heatherly vikeys mode tracking          */
 #include    <yMACRO.h>            /* heatherly vikeys macro processing       */

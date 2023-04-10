@@ -320,6 +320,8 @@ yviopengl__display         (char a_part, char a_loc, char a_style)
    short       n, a, b, c, e;
    char        f           [LEN_LABEL] = "";
    char        t           [LEN_RECD]  = "";
+   char        x_text      [LEN_RECD]  = "";
+   char        x_tlen      [LEN_TERSE] = "";
    char        x_mark      =  ' ';
    short       x_beg       =    0;
    short       x_end       =    0;
@@ -351,8 +353,10 @@ yviopengl__display         (char a_part, char a_loc, char a_style)
    /*---(get contents)-------------------*/
    ySRC_contents (a_part, &m, l, &n, &a, &b, &c, &e, f, t);
    DEBUG_GRAF   yLOG_complex  ("pos"       , "%3dn, %3da, %3db, %3dc, %3de", n, a, b, c, e);
-   if (strlen (t) == 0)  strcpy (t, "·····");
-   DEBUG_GRAF   yLOG_complex  ("content"   , "%c å%sæ", m, t);
+   strlpadn (strlen (t), x_tlen, '.', '>', 4);
+   /*> if (strlen (t) == 0)  strcpy (t, "·····");                                     <*/
+   sprintf (x_text, "%så%sæ", x_tlen, t);
+   DEBUG_GRAF   yLOG_complex  ("content"   , "%c å%sæ", m, x_text);
    /*> strlcpy (l, "JESUS", LEN_LABEL);                                               <*/
    DEBUG_GRAF   yLOG_info     ("label"     , l);
    DEBUG_GRAF   yLOG_info     ("format"    , f);
@@ -373,9 +377,9 @@ yviopengl__display         (char a_part, char a_loc, char a_style)
          glVertex3f  (x_min + 2, y_min + 2,  960);
       } glEnd   ();
       yVIEW_color (a_part, YCOLOR_MIN, 1.0);
-      /*> glColor4f (0.00, 0.00, 0.00, 1.00);                                         <*/
+      glColor4f (0.00, 0.00, 0.00, 1.00);
       glTranslatef (x_min + 2.0, y_min + 2.0, 970.0f);
-      yFONT_print  (myVIOPENGL.fixed, 8, YF_BOTLEF, t);
+      yFONT_print  (myVIOPENGL.fixed, 8, YF_BOTLEF, x_text);
    } glPopMatrix   ();
    DEBUG_GRAF   yLOG_char    ("x_edit"    , x_edit);
    /*---(draw)---------------------------*/

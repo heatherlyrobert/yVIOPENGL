@@ -154,7 +154,7 @@ yviopengl_notes__line    (char a_type, char c, short xb, short yb, short xe, sho
    DEBUG_GRAF   yLOG_complex ("args"       , "%c/%3d  %4dx %4dy  %4dx %4dy", c, c, xb, yb, xe, ye);
    /*---(line color)---------------------*/
    if (a_type == 'd') {
-      x_color = yVIEW_note_line ();
+      /*> x_color = yVIEW_note_line ();                                               <*/
       switch (x_color) {
       case 'k' : glColor4f (0.0, 0.0, 0.0, 1.0);    break;
       case 'w' : glColor4f (1.0, 1.0, 1.0, 1.0);    break;

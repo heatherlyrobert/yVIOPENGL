@@ -33,7 +33,6 @@ yVIOPENGL_version       (void)
    return yVIOPENGL_ver;
 }
 
-
 char
 yVIOPENGL_init          (char *a_title, char *a_version, char a_mode, short a_wide, short a_tall)
 {
@@ -55,93 +54,31 @@ yVIOPENGL_init          (char *a_title, char *a_version, char a_mode, short a_wi
       return rce;
    }
    DEBUG_GRAF   yLOG_info    ("a_version" , a_version);
-   DEBUG_GRAF   yLOG_value   ("a_version" , a_version);
-   --rce;  if (a_title == NULL) {
-      DEBUG_GRAF   yLOG_exitr   (__FUNCTION__, rce);
-      return rce;
-   }
-   /*---(start window)-------------------*/
-   /*> rc = yX11_start (a_title, a_wide, a_tall, YX_FOCUSABLE, YX_FIXED, '-');        <* 
-    *> DEBUG_GRAF   yLOG_value   ("yX11"    , rc);                                    <* 
-    *> --rce;  if (rc < 0) {                                                          <* 
-    *>    DEBUG_GRAF   yLOG_exitr   (__FUNCTION__, rce);                              <* 
-    *>    return rce;                                                                 <* 
-    *> }                                                                              <*/
+   /*---(save keys)----------------------*/
    myVIOPENGL.wide = a_wide;
    myVIOPENGL.tall = a_tall;
    strlcpy (myVIOPENGL.title, a_title, LEN_HUND);
    /*---(color options)------------------*/
    rc = yCOLOR_init     ();
-   yCMD_add (YCMD_M_VIEW   , "palette"     , ""    , "isss" , yCOLOR_palette             , "" );
-   yCMD_add (YCMD_M_VIEW   , "wheel"       , ""    , "s"    , yCOLOR_wheel               , "" );
-   yCMD_add (YCMD_M_VIEW   , "degree"      , "deg" , "i"    , yCOLOR_deg                 , "" );
-   yCMD_add (YCMD_M_VIEW   , "harmony"     , "har" , "s"    , yCOLOR_harm                , "" );
-   yCMD_add (YCMD_M_VIEW   , "value"       , "val" , "s"    , yCOLOR_val                 , "" );
-   yCMD_add (YCMD_M_VIEW   , "saturation"  , "sat" , "s"    , yCOLOR_sat                 , "" );
+   yCMD_add (YVIHUB_M_VIEW   , "palette"     , ""    , "isss" , yCOLOR_palette             , "" );
+   yCMD_add (YVIHUB_M_VIEW   , "wheel"       , ""    , "s"    , yCOLOR_wheel               , "" );
+   yCMD_add (YVIHUB_M_VIEW   , "degree"      , "deg" , "i"    , yCOLOR_deg                 , "" );
+   yCMD_add (YVIHUB_M_VIEW   , "harmony"     , "har" , "s"    , yCOLOR_harm                , "" );
+   yCMD_add (YVIHUB_M_VIEW   , "value"       , "val" , "s"    , yCOLOR_val                 , "" );
+   yCMD_add (YVIHUB_M_VIEW   , "saturation"  , "sat" , "s"    , yCOLOR_sat                 , "" );
    yCOLOR_diff_scheme (YCOLOR_WHITE);
    yviopengl_color_init ();
-   /*----(first)-------------------------*/
-   rc = yMODE_init           (a_mode);
-   DEBUG_GRAF   yLOG_value   ("yMODE"   , rc);
+   /*---(library inits)------------------*/
+   rc = yVIHUB_init (YVIEW_OPENGL, a_title, a_version, a_mode, yviopengl_cleanse, yviopengl_prep, yviopengl_cursor, yviopengl_refresh);
+   DEBUG_GRAF   yLOG_value   ("library"   , rc);
    --rce;  if (rc < 0) {
       DEBUG_GRAF   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
-   /*---(TEMP)------------------------*/
-   rc = yFILE_init           ();
-   DEBUG_GRAF   yLOG_value   ("yFILE"   , rc);
-   --rce;  if (rc < 0) {
-      DEBUG_GRAF   yLOG_exitr   (__FUNCTION__, rce);
-      return rce;
-   }
-   yMODE_debug_status ();
-   rc = yCMD_init            ();
-   DEBUG_GRAF   yLOG_value   ("yCMD"    , rc);
-   --rce;  if (rc < 0) {
-      DEBUG_GRAF   yLOG_exitr   (__FUNCTION__, rce);
-      return rce;
-   }
-   /*---(early)-----------------------*/
-   rc = yVIEW_init (YVIEW_OPENGL, a_title, a_version, yviopengl_cleanse, yviopengl_prep, yviopengl_cursor, yviopengl_refresh);
-   DEBUG_GRAF   yLOG_value   ("yVIEW"   , rc);
-   --rce;  if (rc < 0) {
-      DEBUG_GRAF   yLOG_exitr   (__FUNCTION__, rce);
-      return rce;
-   }
+   /*----(update sizes)------------------*/
    yVIEW_resize (a_wide, a_tall, 0);
    yVIEW_debug_list ();
-   /*----(later)-------------------------*/
-   rc = yKEYS_init           ();
-   DEBUG_GRAF   yLOG_value   ("yKEYS"   , rc);
-   --rce;  if (rc < 0) {
-      DEBUG_GRAF   yLOG_exitr   (__FUNCTION__, rce);
-      return rce;
-   }
-   rc = yMAP_init            ();
-   DEBUG_GRAF   yLOG_value   ("yMAP"    , rc);
-   --rce;  if (rc < 0) {
-      DEBUG_GRAF   yLOG_exitr   (__FUNCTION__, rce);
-      return rce;
-   }
-   rc = ySRC_init            ();
-   DEBUG_GRAF   yLOG_value   ("ySRC"    , rc);
-   --rce;  if (rc < 0) {
-      DEBUG_GRAF   yLOG_exitr   (__FUNCTION__, rce);
-      return rce;
-   }
-   rc = yMACRO_init          ();
-   DEBUG_GRAF   yLOG_value   ("yMACRO"  , rc);
-   --rce;  if (rc < 0) {
-      DEBUG_GRAF   yLOG_exitr   (__FUNCTION__, rce);
-      return rce;
-   }
-   rc = yMARK_init           ();
-   DEBUG_GRAF   yLOG_value   ("yMARK"   , rc);
-   --rce;  if (rc < 0) {
-      DEBUG_GRAF   yLOG_exitr   (__FUNCTION__, rce);
-      return rce;
-   }
-   /*---(curses drawing)-----------------*/
+   /*---(opengl drawing)-----------------*/
    yVIEW_simple (YVIEW_TITLE  , -1, 0, yviopengl_title);
    yVIEW_simple (YVIEW_VERSION, -1, 0, yviopengl_version);
    yVIEW_simple (YVIEW_MODES  , -1, 0, yviopengl_modes);
@@ -180,10 +117,7 @@ yVIOPENGL_dawn                 (void)
    }
    /*---(color)--------------------------*/
    DEBUG_GRAF   yLOG_note    ("clearing");
-   /*> glClearColor    (1.0f, 1.0f, 1.0f, 1.0f);                                      <*/
    yVIEW_color_clear (YVIEW_MAIN);
-   /*> glClearColor    (0.3f, 0.3f, 0.3f, 1.0f);                                      <*/
-   /*> glClearDepth    (1.0f);                                                        <*/
    /*---(textures)-----------------------*/
    DEBUG_GRAF   yLOG_note    ("textures");
    glEnable        (GL_TEXTURE_2D);    /* NEW */
@@ -223,11 +157,38 @@ yVIOPENGL_dawn                 (void)
 }
 
 char
-yVIOPENGL_dusk                 (void)
+yVIOPENGL_resize        (char *a_title, short a_wide, short a_tall)
+{
+   /*---(locals)-----------+-----+-----+-*/
+   char        rce         =  -10;
+   char        rc          =    0;
+   /*---(header)-------------------------*/
+   DEBUG_GRAF   yLOG_enter   (__FUNCTION__);
+   /*---(defense)------------------------*/
+   DEBUG_GRAF   yLOG_point   ("a_title"   , a_title);
+   --rce;  if (a_title == NULL) {
+      DEBUG_GRAF   yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
+   }
+   DEBUG_GRAF   yLOG_info    ("a_title"   , a_title);
+   /*---(save keys)----------------------*/
+   myVIOPENGL.wide = a_wide;
+   myVIOPENGL.tall = a_tall;
+   strlcpy (myVIOPENGL.title, a_title, LEN_HUND);
+   /*----(update sizes)------------------*/
+   yVIEW_resize (a_wide, a_tall, 0);
+   yVIEW_debug_list ();
+   /*---(complete)-----------------------*/
+   DEBUG_GRAF   yLOG_exit    (__FUNCTION__);
+   return 0;
+}
+
+char
+yVIOPENGL_dusk          (void)
 {
    /*---(header)----------------------*/
    DEBUG_GRAF   yLOG_enter   (__FUNCTION__);
-   /*---(shutdown ncurses)------------*/
+   /*---(shutdown nopengl)------------*/
    yviopengl_font_close ();
    yX11_end  ();
    /*---(complete)-----------------------*/
@@ -267,7 +228,7 @@ yviopengl__unit_quiet   (void)
    int         x_narg       = 1;
    char       *x_args [20]  = {"yVIOPENGL_unit" };
    yMODE_init (MODE_MAP);
-   yMODE_handler_setup ();
+   yMODE_unit_handlers ();
    yVIOPENGL_init ("yVIOPENGL itself ;)", P_VERNUM, MODE_MAP, 300, 500);
    return 0;
 }
@@ -279,11 +240,11 @@ yviopengl__unit_loud    (void)
    char       *x_args [20]  = {"yVIOPENGL_unit" };
    yURG_logger   (x_narg, x_args);
    yURG_urgs     (x_narg, x_args);
-   yURG_name  ("kitchen"      , YURG_ON);
-   yURG_name  ("ystr"         , YURG_ON);
+   yURG_by_name  ("kitchen"      , YURG_ON);
+   yURG_by_name  ("ystr"         , YURG_ON);
    yMODE_init (MODE_MAP);
-   yMODE_handler_setup ();
-   DEBUG_SCRP   yLOG_info     ("yVIOPENGL"  , yVIOPENGL_version   ());
+   yMODE_unit_handlers ();
+   DEBUG_PROG   yLOG_info     ("yVIOPENGL"  , yVIOPENGL_version   ());
    yVIOPENGL_init ("yVIOPENGL itself ;)", P_VERNUM, MODE_MAP, 300, 500);
    return 0;
 }
