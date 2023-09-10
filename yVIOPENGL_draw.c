@@ -353,11 +353,11 @@ yviopengl__display         (char a_part, char a_loc, char a_style)
    /*---(get contents)-------------------*/
    ySRC_contents (a_part, &m, l, &n, &a, &b, &c, &e, f, t);
    DEBUG_GRAF   yLOG_complex  ("pos"       , "%3dn, %3da, %3db, %3dc, %3de", n, a, b, c, e);
-   strlpadn (strlen (t), x_tlen, '.', '>', 4);
+   ystrlpadn (strlen (t), x_tlen, '.', '>', 4);
    /*> if (strlen (t) == 0)  strcpy (t, "·····");                                     <*/
    sprintf (x_text, "%så%sæ", x_tlen, t);
    DEBUG_GRAF   yLOG_complex  ("content"   , "%c å%sæ", m, x_text);
-   /*> strlcpy (l, "JESUS", LEN_LABEL);                                               <*/
+   /*> ystrlcpy (l, "JESUS", LEN_LABEL);                                               <*/
    DEBUG_GRAF   yLOG_info     ("label"     , l);
    DEBUG_GRAF   yLOG_info     ("format"    , f);
    /*---(test for editing)---------------*/
@@ -394,7 +394,7 @@ yviopengl__display         (char a_part, char a_loc, char a_style)
    /*---(content)------------------------*/
    /*> if (a_part == YVIEW_COMMAND) {                                                                                            <* 
     *>    x_off = 4;                                                                                                             <* 
-    *>    strlpadn (n, nn, '.', '>', 4);                                                                                         <* 
+    *>    ystrlpadn (n, nn, '.', '>', 4);                                                                                         <* 
     *>    mvprintw (x_bott, x_left, "%s %-*.*s ", nn, a, a, t + b);                                                              <* 
     *> } else {                                                                                                                  <* 
     *>    switch (a_style) {                                                                                                     <* 
@@ -411,7 +411,7 @@ yviopengl__display         (char a_part, char a_loc, char a_style)
     *>       if (n == 0) {                                                                                                       <* 
     *>          mvprintw (x_bott, x_left, "%-4.4s %c%-*.*s ", "····", G_CHAR_NULL, a - 1, a - 1, YSTR_EMPTY);                    <* 
     *>       } else {                                                                                                            <* 
-    *>          strlpadn (n, nn, '.', '>', 4);                                                                                   <* 
+    *>          ystrlpadn (n, nn, '.', '>', 4);                                                                                   <* 
     *>          mvprintw (x_bott, x_left, "%s %-*.*s ", nn, a, a, t + b);                                                        <* 
     *>       }                                                                                                                   <* 
     *>       break;                                                                                                              <* 
@@ -420,7 +420,7 @@ yviopengl__display         (char a_part, char a_loc, char a_style)
     *>       if (n == 0) {                                                                                                       <* 
     *>          mvprintw (x_bott, x_left, " %-6.6s %-4.4s %c%-*.*s ", l, "····", G_CHAR_NULL, a - 1, a - 1, YSTR_EMPTY);         <* 
     *>       } else {                                                                                                            <* 
-    *>          strlpadn (n, nn, '.', '>', 4);                                                                                   <* 
+    *>          ystrlpadn (n, nn, '.', '>', 4);                                                                                   <* 
     *>          mvprintw (x_bott, x_left, " %-6.6s %s %-*.*s ", l, nn, a, a, t + b);                                             <* 
     *>       }                                                                                                                   <* 
     *>       break;                                                                                                              <* 
@@ -429,7 +429,7 @@ yviopengl__display         (char a_part, char a_loc, char a_style)
     *>       if (n == 0) {                                                                                                       <* 
     *>          mvprintw (x_bott, x_left, " %-6.6s %s %-4.4s %c%-*.*s ", l, f, "····", G_CHAR_NULL, a - 1, a - 1, YSTR_EMPTY);   <* 
     *>       } else {                                                                                                            <* 
-    *>          strlpadn (n, nn, '.', '>', 4);                                                                                   <* 
+    *>          ystrlpadn (n, nn, '.', '>', 4);                                                                                   <* 
     *>          mvprintw (x_bott, x_left, " %-6.6s %s %s %-*.*s ", l, f, nn, a, a, t + b);                                       <* 
     *>       }                                                                                                                   <* 
     *>       break;                                                                                                              <* 

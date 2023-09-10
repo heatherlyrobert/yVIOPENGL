@@ -130,10 +130,10 @@ yviopengl_menus         (void)
    DEBUG_GRAF   yLOG_complex ("before"   , "%d, %s, %s", x_lvl, b, s);
    /*> DEBUG_GRAF   yLOG_complex ("last"     , "%d, %s, %s", x_lastl, x_lastb, x_lasts);   <*/
    /*> if (x_lvl == 0)           { strcpy (x_lasts, ""); strcpy (x_lastb, ""); }      <*/
-   /*> if (strcmp (b, "") == 0)  { strlcpy (b, x_lastb, LEN_TERSE); x_lvl = x_lastl; }   <* 
-    *> else                      { strlcpy (x_lastb, b, LEN_TERSE); x_lastl = x_lvl; }   <* 
-    *> if (strcmp (s, "") == 0)  strlcpy (s, x_lasts, LEN_LABEL);                        <* 
-    *> else                      strlcpy (x_lasts, s, LEN_LABEL);                        <*/
+   /*> if (strcmp (b, "") == 0)  { ystrlcpy (b, x_lastb, LEN_TERSE); x_lvl = x_lastl; }   <* 
+    *> else                      { ystrlcpy (x_lastb, b, LEN_TERSE); x_lastl = x_lvl; }   <* 
+    *> if (strcmp (s, "") == 0)  ystrlcpy (s, x_lasts, LEN_LABEL);                        <* 
+    *> else                      ystrlcpy (x_lasts, s, LEN_LABEL);                        <*/
    /*> DEBUG_GRAF   yLOG_complex ("after"    , "%d, %s, %s", x_lvl, b, s);            <*/
    /*> DEBUG_GRAF   yLOG_complex ("last"     , "%d, %s, %s", x_lastl, x_lastb, x_lasts);   <*/
    /*---(check status)-------------------*/
@@ -145,7 +145,7 @@ yviopengl_menus         (void)
       else              glColor4f (0.00, 0.00, 0.00, 1.00);
       /*> glTranslatef (x_cen, y_mid, 880.0);                                         <*/
       switch (x_lvl) {
-      case  0 : strlcpy (t, " main menu ", LEN_HUND); break;
+      case  0 : ystrlcpy (t, " main menu ", LEN_HUND); break;
       case  1 : sprintf (t, " %s sub-menu ", s);      break;
       case  2 : sprintf (t, " %s options " , s);      break;
       }

@@ -36,8 +36,8 @@
 
 #define     P_VERMAJOR  "2.--, clean, improve, and expand"
 #define     P_VERMINOR  "2.0-, break out yVIKEYS into curses and opengl"
-#define     P_VERNUM    "2.0h"
-#define     P_VERTXT    "had to sync with major init improvements learned from yVICURSES"
+#define     P_VERNUM    "2.0i"
+#define     P_VERTXT    "updated ySTR functions to ¶ystr¶ prefix"
 
 #define     P_PRIORITY  "direct, simple, brief, vigorous, and lucid (h.w. fowler)"
 #define     P_PRINCIPAL "[grow a set] and build your wings on the way down (r. bradbury)"

@@ -185,7 +185,7 @@ yVIOPENGL_init          (char *a_title, char *a_version, char a_mode, short a_wi
    /*---(save keys)----------------------*/
    myVIOPENGL.wide = a_wide;
    myVIOPENGL.tall = a_tall;
-   strlcpy (myVIOPENGL.title, a_title, LEN_HUND);
+   ystrlcpy (myVIOPENGL.title, a_title, LEN_HUND);
    /*----(update sizes)------------------*/
    /*> yVIEW_debug_list ();                                                           <*/
    /*---(color options)------------------*/
@@ -316,7 +316,7 @@ yVIOPENGL_resize        (char *a_title, short a_wide, short a_tall)
    /*---(save keys)----------------------*/
    myVIOPENGL.wide = a_wide;
    myVIOPENGL.tall = a_tall;
-   strlcpy (myVIOPENGL.title, a_title, LEN_HUND);
+   ystrlcpy (myVIOPENGL.title, a_title, LEN_HUND);
    /*----(update sizes)------------------*/
    yVIEW_resize (a_wide, a_tall, 0);
    yVIEW_debug_list ();
