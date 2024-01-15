@@ -170,7 +170,7 @@ yviopengl_prep          (char a_part)
    }
    DEBUG_GRAF   yLOG_complex (x_name, "left %4d, wide %4d, bott %4d, tall %4d", x_left, x_wide, x_bott, x_tall);
    DEBUG_GRAF   yLOG_complex (x_name, "%c on %c, %c x_min %4d, x_max %4d, y_min %4d, y_max %4d", a_part, x_on, x_anchor, x_min, x_max, y_min, y_max);
-   if (x_on != 'y') {
+   if (strchr ("MFH", a_part) == NULL && x_on != 'y') {
       DEBUG_GRAF   yLOG_note    ("hidden, not marked for display");
       DEBUG_GRAF   yLOG_exit    (__FUNCTION__);
       return 0;
@@ -183,7 +183,7 @@ yviopengl_prep          (char a_part)
    glMatrixMode    (GL_PROJECTION);
    DEBUG_GRAF   yLOG_char    ("x_type"    , x_type);
    glLoadIdentity  ();
-   if      (x_type  == YVIEW_FLAT)     glOrtho         (x_min, x_max, y_min, y_max,  -500, 500);
+   if      (x_type  == YVIEW_FLAT)     glOrtho         (x_min, x_max, y_min, y_max, -1000, 1000);
    else if (x_type  == YVIEW_FLATISH)  glOrtho         (x_min, x_max, y_min, y_max, -1000, 1000);
    else                                gluPerspective  (45.0f, (GLfloat) x_len / (GLfloat) y_len, 0.01f, 4000.0f);
    glMatrixMode    (GL_MODELVIEW);
@@ -195,10 +195,10 @@ yviopengl_prep          (char a_part)
          yVIEW_color_back (a_part);
          /*> yCOLOR_opengl (YCOLOR_BAS, YCOLOR_ACC, 1.0);                             <*/
          glBegin         (GL_POLYGON); {
-            glVertex3f  (x_min, y_max, -250);
-            glVertex3f  (x_max, y_max, -250);
-            glVertex3f  (x_max, y_min, -250);
-            glVertex3f  (x_min, y_min, -250);
+            glVertex3f  (x_min, y_max, -1000);
+            glVertex3f  (x_max, y_max, -1000);
+            glVertex3f  (x_max, y_min, -1000);
+            glVertex3f  (x_min, y_min, -1000);
          } glEnd   ();
       } glPopMatrix   ();
    } else {

@@ -286,7 +286,7 @@ yviopengl__color        (char a_part)
    DEBUG_GRAF   yLOG_note    ("assign a opengl color");
    DEBUG_GRAF   yLOG_char    ("x_code"    , x_code);
    switch (x_code) {
-   /*> case  'm' :  yVIOPENGL_by_name ("i_maps", '-', 1.00);  break;                  <*/
+      /*> case  'm' :  yVIOPENGL_by_name ("i_maps", '-', 1.00);  break;                  <*/
    case  'm' :  yCOLOR_opengl (YCOLOR_BAS, YCOLOR_LIG, 1.0);    break;
    case  'c' :  yCOLOR_opengl (YCOLOR_BAS, YCOLOR_LIG, 1.0);    break;
    case  's' :  yCOLOR_opengl (YCOLOR_SPE, YCOLOR_SRC, 1.0);    break;
@@ -294,7 +294,7 @@ yviopengl__color        (char a_part)
    case  'i' :  yCOLOR_opengl (YCOLOR_SPE, YCOLOR_INP, 1.0);    break;
    case  'w' :  yCOLOR_opengl (YCOLOR_SPE, YCOLOR_WDR, 1.0);    break;
    case  'e' :  yCOLOR_opengl (YCOLOR_SPE, YCOLOR_ERR, 1.0);    break;
-   /*> default   :  yVIOPENGL_by_name ("i_maps", '-', 1.00);  break;                  <*/
+                /*> default   :  yVIOPENGL_by_name ("i_maps", '-', 1.00);  break;                  <*/
    default   :  yVIEW_color (a_part, YCOLOR_ACC, 1.0);    break;
    }
    /*---(complete)-----------------------*/
@@ -327,11 +327,15 @@ yviopengl__display         (char a_part, char a_loc, char a_style)
    short       x_end       =    0;
    int         x_off       =    0;
    char        nn          [LEN_LABEL] = "";
+   float       x, y;
    /*---(header)-------------------------*/
    DEBUG_GRAF   yLOG_enter   (__FUNCTION__);
    DEBUG_GRAF   yLOG_complex ("args"      , "%c part, %c loc, %c style", a_part, a_loc, a_style);
+   yVIEW_curses (YVIEW_WINDOW, x_name, NULL, NULL, NULL, NULL, &x_left, &x_wide, &x_bott, &x_tall);
+   DEBUG_GRAF   yLOG_complex (x_name, "%4dl  %4db  %4dw  %4dt", x_left, x_bott, x_wide, x_tall);
    /*---(get size)-----------------------*/
    yVIEW_curses (a_loc, x_name, &x_on, NULL, NULL, NULL, &x_left, &x_wide, &x_bott, &x_tall);
+   DEBUG_GRAF   yLOG_complex (x_name, "%4dl  %4db  %4dw  %4dt", x_left, x_bott, x_wide, x_tall);
    /*> yVIEW_bounds (a_loc, &x_type, &x_anchor, NULL, &x_min, &x_max, &x_len, &y_min, &y_max, &y_len);   <*/
    if (a_loc != YVIEW_FLOAT) {
       x_min = 0;
@@ -361,6 +365,25 @@ yviopengl__display         (char a_part, char a_loc, char a_style)
    DEBUG_GRAF   yLOG_info     ("label"     , l);
    DEBUG_GRAF   yLOG_info     ("format"    , f);
    /*---(test for editing)---------------*/
+   glColor4f (0.0, 0.0, 0.0, 1.0);
+   /*> for (x = -1000; x < 1000; x += 100)  {                                                   <* 
+    *>    for (y = -1000; y < 1000; y += 100)  {                                                <* 
+    *>       glPushMatrix    (); {                                                              <* 
+    *>          sprintf (x_text, "%4dx, %4dy", x, y);                                           <* 
+    *>          /+> glTranslatef (x, y, 970.0f);                                          <+/   <* 
+    *>          yFONT_print  (myVIOPENGL.fixed, 8, YF_BOTLEF, x_text);                          <* 
+    *>       }                                                                                  <* 
+    *>    } glPopMatrix   ();                                                                   <* 
+    *> }                                                                                        <*/
+   /*> x_min -= x_wide / 2.0;                                                         <* 
+    *> x_max -= x_wide / 2.0;                                                         <* 
+    *> y_min  = x_tall - y_min;                                                       <* 
+    *> y_max  = x_tall - y_max;                                                       <*/
+   /*> x_min  = -120.0;                                                               <* 
+    *> x_max  =  180.0;                                                               <* 
+    *> y_min  =    0.0;                                                               <* 
+    *> y_max  =   15.0;                                                               <*/
+   /*> DEBUG_GRAF   yLOG_complex (x_name, "x_min %4d, x_max %4d, y_min %4d, y_max %4d", x_min, x_max, y_min, y_max);   <*/
    glPushMatrix    (); {
       glColor4f (0.0, 0.0, 0.0, 1.0);
       glBegin         (GL_POLYGON); {
