@@ -2,6 +2,7 @@
 #ifndef yVIOPENGL
 #define yVIOPENGL yes
 
+#include <ySTR_solo.h>
 
 
 typedef  unsigned char        uchar;
@@ -27,6 +28,11 @@ char*       yVIOPENGL_at_loc        (short x, short y);
 
 char        yVIOPENGL_notes_mask    (void *gc, void *bounds);
 
+char        yVIOPENGL_ribbon_purge  (void);
+char        yVIOPENGL_ribbon_config (char *e_status, char a_color, char a_hover, char a_touch, char a_margin);
+char        yVIOPENGL_ribbon_add    (uchar a_grid, short a_rot, char a_cat [LEN_LABEL], char a_sub [LEN_LABEL], char *e_func);
+char        yVIOPENGL_ribbon_draw   (void);
+char        yVIOPENGL_ribbon_act    (char a_valid, char a_touch, int a_wx, int a_wy);
 
 
 #endif
